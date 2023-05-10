@@ -1,4 +1,4 @@
-package es.upm.pproject.sokoban;
+package es.upm.pproject.sokoban.controller;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
