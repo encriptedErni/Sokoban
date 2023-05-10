@@ -1,18 +1,22 @@
 package es.upm.pproject.sokoban.controller;
+
 import es.upm.pproject.sokoban.interfaces.Square;
 import es.upm.pproject.sokoban.model.Position;
+import es.upm.pproject.sokoban.model.WarehouseMan;
 
 import java.io.*;
 import java.util.Map;
 import java.util.HashMap;
 
 public class GameController {
-    public static Map<Position,Square> parse(String fileName) {
+    static HashMap<Position, Square> board;
+
+    public static Map<Position, Square> parse(String fileName) {
         String path = "./levels/" + fileName;
         File fd = new File(path);
         try (BufferedReader br = new BufferedReader(new FileReader(fd))) {
             // Creating the map
-            HashMap<Position,Square> board = new HashMap<>();
+            GameController.board = new HashMap<>();
 
             // Getting the level name
             String level = br.readLine();
@@ -24,24 +28,29 @@ public class GameController {
 
             // Getting the board itself
             String line;
-            for (int i = 0; i < rows; ++i) {
+            Position position;
+            for (int i = rows-1; i >= 0; --i) {
                 line = br.readLine();
                 for (int j = 0; j < line.length(); ++j) {
-                    switch(line.charAt(j)) {
+                    switch (line.charAt(j)) {
                         case ' ':
                             // Don't add to the map
                             break;
                         case '+':
-                            // board.put(new Position(i, j), new Wall());
+                            position = new Position(i, j);
+                            // board.put(position, new Wall());
                             break;
                         case '*':
-                            // board.put(new Position(i, j), new Box());
+                            position = new Position(i, j);
+                            // board.put(position, new Box());
                             break;
                         case 'W':
-                            // board.put(new Position(i, j), new WarehouseMan());
+                            position = new Position(i, j);
+                            board.put(position, new WarehouseMan(position, board));
                             break;
                         case '#':
-                            // board.put(new Position(i, j), new GoalPosition());
+                            position = new Position(i, j);
+                            // board.put(position, new GoalPosition());
                             break;
                     }
                 }
@@ -53,6 +62,7 @@ public class GameController {
 
         return null;
     }
+
     public static void main(String[] args) {
         parse("level1.txt");
     }

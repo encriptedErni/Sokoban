@@ -15,7 +15,7 @@ public class WarehouseMan extends Square {
 
     private boolean checkPosition(Position newPosition, char way) {
         Square square;
-        if (newPosition==null) return false;
+        if (newPosition == null) return false;
         if (board.containsKey(newPosition)) {
             square = (Square) board.get(newPosition);
             if (!square.move(way)) {
@@ -32,16 +32,16 @@ public class WarehouseMan extends Square {
         Position newPosition = null;
         switch (way) {
             case 'N':
-                newPosition = new Position(position.getX() + 1, position.getY());
-                break;
-            case 'S':
-                newPosition = new Position(position.getX() - 1, position.getY());
-                break;
-            case 'E':
                 newPosition = new Position(position.getX(), position.getY() + 1);
                 break;
-            case 'W':
+            case 'S':
                 newPosition = new Position(position.getX(), position.getY() - 1);
+                break;
+            case 'E':
+                newPosition = new Position(position.getX() + 1, position.getY());
+                break;
+            case 'W':
+                newPosition = new Position(position.getX() - 1, position.getY());
                 break;
         }
         return checkPosition(newPosition, way);
