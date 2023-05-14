@@ -4,16 +4,19 @@ import java.util.HashMap;
 
 import es.upm.pproject.sokoban.interfaces.Square;
 
-public class Wall {
+public class Wall extends Square{
 	 private Position position;
-	 private static HashMap board = new HashMap<Position, Square>();
+	 private HashMap board = new HashMap<Position, Square>();
 
 	 public Wall(Position position, HashMap<Position, Square> board) {
 	        this.position = position;
-	        Wall.board = board;
+	        this.board = board;
 	    }
 	 
 	 public boolean move(char way) {
 		 return false;
 	 }
+	public Position getPosition() {
+		return position;
+	}
 }
