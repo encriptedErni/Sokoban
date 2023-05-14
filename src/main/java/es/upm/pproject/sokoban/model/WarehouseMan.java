@@ -6,6 +6,7 @@ import java.security.InvalidParameterException;
 import java.util.HashMap;
 
 public class WarehouseMan extends Square {
+    private int movements = 0;
     private Position position;
     private HashMap board;
 
@@ -25,6 +26,7 @@ public class WarehouseMan extends Square {
         }
         board.remove(position);
         this.position = newPosition;
+        movements++;
         board.put(position, this);
         return true;
     }
@@ -49,7 +51,12 @@ public class WarehouseMan extends Square {
         }
         return checkPosition(newPosition, way);
     }
+
     public Position getPosition() {
         return position;
+    }
+
+    public int getMovements() {
+        return movements;
     }
 }
