@@ -2,15 +2,16 @@ package es.upm.pproject.sokoban.model;
 
 import es.upm.pproject.sokoban.interfaces.Square;
 
+import java.security.InvalidParameterException;
 import java.util.HashMap;
 
 public class WarehouseMan extends Square {
     private Position position;
-    private static HashMap board = new HashMap<Position, Square>();
+    private HashMap board;
 
     public WarehouseMan(Position position, HashMap<Position, Square> board) {
         this.position = position;
-        WarehouseMan.board = board;
+        this.board = board;
     }
 
     private boolean checkPosition(Position newPosition, char way) {
@@ -43,7 +44,12 @@ public class WarehouseMan extends Square {
             case 'W':
                 newPosition = new Position(position.getX() - 1, position.getY());
                 break;
+            default:
+                throw new InvalidParameterException("The warehouse man just can move N (north), S (south), E (east), W (west)");
         }
         return checkPosition(newPosition, way);
+    }
+    public Position getPosition() {
+        return position;
     }
 }
