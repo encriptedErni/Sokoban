@@ -1,7 +1,6 @@
 package es.upm.pproject.sokoban.model;
 
 import es.upm.pproject.sokoban.interfaces.Square;
-
 import java.security.InvalidParameterException;
 import java.util.HashMap;
 
@@ -59,4 +58,5 @@ public class WarehouseMan extends Square {
     public int getMovements() {
         return movements;
     }
+    
 }
