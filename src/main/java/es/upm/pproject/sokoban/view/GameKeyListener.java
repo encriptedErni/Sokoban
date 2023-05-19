@@ -7,9 +7,10 @@ import java.awt.event.KeyListener;
 
 public class GameKeyListener implements KeyListener {
     private GameController controller;
-
-    public GameKeyListener(GameController controller) {
+    private GamePanel boardPanel;
+    public GameKeyListener(GameController controller, GamePanel boardPanel) {
         this.controller = controller;
+        this.boardPanel = boardPanel;
     }
 
     @Override
@@ -17,15 +18,19 @@ public class GameKeyListener implements KeyListener {
         int keyCode = e.getKeyCode();
 
         if (isUp(keyCode)) {
-            // controller.moveUp();
+            controller.moveUp();
+            boardPanel.repaint();
         } else if (isDown(keyCode)) {
-            // controller.moveDown();
+            controller.moveDown();
+            boardPanel.repaint();
         } else if (isRight(keyCode)) {
-            // controller.moveRight();
+            controller.moveRight();
+            boardPanel.repaint();
         } else if (isLeft(keyCode)) {
-            // controller.moveLeft();
+            controller.moveLeft();
+            boardPanel.repaint();
         } else if (isPause(keyCode)) {
-            // controller.pause();
+           // controller.pause();
         }
     }
 

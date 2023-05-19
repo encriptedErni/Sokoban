@@ -7,6 +7,7 @@ import es.upm.pproject.sokoban.model.Position;
 import es.upm.pproject.sokoban.model.Wall;
 import es.upm.pproject.sokoban.model.WarehouseMan;
 
+import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.Map;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class GameController {
     private int rows;
     private int cols;
 
+    private WarehouseMan warehouseMan;
     public HashMap<Position, Square> getBoard() {
         return board;
     }
@@ -45,7 +47,7 @@ public class GameController {
             String line;
             Position position;
 
-            for (int i = rows - 1; i >= 0; --i) {
+            for (int i = 0; i < rows; ++i) {
                 line = br.readLine();
                 for (int j = 0; j < line.length(); ++j) {
                     switch (line.charAt(j)) {
@@ -62,7 +64,8 @@ public class GameController {
                             break;
                         case 'W':
                             position = new Position(j, i);
-                            board.put(position, new WarehouseMan(position, board));
+                            warehouseMan = new WarehouseMan(position, board);
+                            board.put(position, warehouseMan);
                             break;
                         case '#':
                             position = new Position(j, i);
@@ -76,5 +79,23 @@ public class GameController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    // Moving character through board
+    public void moveUp() {
+        warehouseMan.move('N');
+    }
+    public void moveDown() {
+        warehouseMan.move('S');
+    }
+    public void moveLeft(){
+        warehouseMan.move('W');
+    }
+    public void moveRight() {
+        warehouseMan.move('E');
+    }
+
+    // implement later
+    public void pause(){
     }
 }
