@@ -34,10 +34,10 @@ public class WarehouseMan extends Square {
         Position newPosition = null;
         switch (way) {
             case 'N':
-                newPosition = new Position(position.getX(), position.getY() + 1);
+                newPosition = new Position(position.getX(), position.getY() - 1);
                 break;
             case 'S':
-                newPosition = new Position(position.getX(), position.getY() - 1);
+                newPosition = new Position(position.getX(), position.getY() + 1);
                 break;
             case 'E':
                 newPosition = new Position(position.getX() + 1, position.getY());

@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import javax.swing.JPanel;
 
+
 import es.upm.pproject.sokoban.interfaces.Square;
 import es.upm.pproject.sokoban.model.*;
 import es.upm.pproject.sokoban.model.Box;
@@ -16,14 +17,17 @@ import javax.imageio.ImageIO;
 
 
 public class GamePanel extends JPanel {
-	private static final int CELL_SIZE = 50;
+	private int CELL_SIZE = 50;
 	private final int rows, cols;
 	private final HashMap<Position, Square> board;
 	private final Image wall, box, goalPosition, warehouseMan, floor;
-    public GamePanel(HashMap<Position, Square> board, int rows, int cols) {
-        this.board = board;
+
+	private final GameFrame gameFrame;
+    public GamePanel(HashMap<Position,Square> board,int rows, int cols,GameFrame gameFrame) {
+        this.board =board;
 		this.rows = rows;
 		this.cols = cols;
+		this.gameFrame = gameFrame;
         wall = loadImage("./sprites/wall.png");
 		box = loadImage("./sprites/box.png");
 		goalPosition = loadImage("./sprites/goal-position.png");
@@ -57,12 +61,16 @@ public class GamePanel extends JPanel {
 		return img;
 	}
 
+
+
     @Override
     protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		// CELL_SIZE = (gameFrame.getWidth()/rows)+(gameFrame.getHeight()/cols);
 		for (int i = 0; i < cols; ++i)
 			for (int j = 0; j < rows; ++j)
 				g.drawImage(floor, j * CELL_SIZE, i * CELL_SIZE, null, null);
+
 
 		board.forEach((pos, square) -> g.drawImage(classToImage(square), pos.getX() * CELL_SIZE,
 				pos.getY() * CELL_SIZE, CELL_SIZE, CELL_SIZE, null));
