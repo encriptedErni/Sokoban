@@ -3,49 +3,24 @@ package es.upm.pproject.sokoban.view;
 import javax.swing.*;
 
 import es.upm.pproject.sokoban.controller.GameController;
+import es.upm.pproject.sokoban.interfaces.Square;
 import es.upm.pproject.sokoban.model.*;
 import es.upm.pproject.sokoban.model.Box;
 
 import java.util.HashMap;
 
 public class GameFrame  extends JFrame{
-	
-    private HashMap board;
-    public GameFrame(HashMap board) {
-    	this.board = board;
-
+    public GameFrame(GameController gameController) {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Sokoban");
-
-        GamePanel boardPanel = new GamePanel(board);
+        GamePanel boardPanel = new GamePanel(gameController.getBoard(), gameController.getRows(), gameController.getCols());
         add(boardPanel);
-
+        addKeyListener(new GameKeyListener(gameController));
         pack();
-        setLocationRelativeTo(null); // Center the frame on the screen
+        setLocationRelativeTo(null);
         setVisible(true);
-        setSize(500,500);
+        setSize(50 * gameController.getCols(),50 * gameController.getRows());
     }
-    
-    // main prueba
-    
-    public static void main(String[] args) {
-    	HashMap board = new HashMap();
-    	int j = 0;
-    	
-    	Position p = new Position(5, 5);
-    	board.put(p, new WarehouseMan(p, board));
-    	p = new Position(3, 3);
-    	board.put(p, new GoalPosition(p, board));
-    	p = new Position(2, 3);
-    	board.put(p, new Box(p, board));
-    	for(int i = 0; i<10; i++) {
-    		p = new Position(j, i);
-    		board.put(p, new Wall(p, board));
-    	}
-    	
-    	GameFrame g = new GameFrame(board);
-    }
-    
 }
 
   
