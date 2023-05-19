@@ -26,6 +26,8 @@ public class GameFrame  extends JFrame{
         setSize(500,500);
     }
     
+    // main prueba
+    
     public static void main(String[] args) {
     	HashMap board = new HashMap();
     	int j = 0;

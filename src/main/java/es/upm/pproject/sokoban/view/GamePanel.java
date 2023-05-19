@@ -48,9 +48,7 @@ public class GamePanel extends JPanel{
     private Image classToImage(Object o) {
 		Image img = null;
 		
-		
 		if(o.getClass().equals(new Wall(null, null).getClass())) {
-			System.out.println("ENTREEE");
 			img = Wall;
 		}
 		
@@ -78,7 +76,6 @@ public class GamePanel extends JPanel{
         
         for (int i = 0; i < 10; i++) {
         	for(int j = 0; j < 10; j++) {
-        		System.out.println(i + "......." + j);
         		g.drawImage(Floor, j*CELL_SIZE, i*CELL_SIZE, CELL_SIZE, CELL_SIZE, null);
         		
         		Position p = new Position(j, i);
