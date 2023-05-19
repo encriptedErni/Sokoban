@@ -12,14 +12,16 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class GameController {
-    public HashMap<Position, Square> board;
+    private HashMap<Position, Square> board;
     private int rows;
     private int cols;
 
+    public HashMap<Position, Square> getBoard() {
+        return board;
+    }
     public int getRows() {
     	return rows;
     }
-    
     public int getCols() {
     	return cols;
     }
@@ -42,8 +44,7 @@ public class GameController {
             // Getting the board itself
             String line;
             Position position;
-            
-            
+
             for (int i = rows - 1; i >= 0; --i) {
                 line = br.readLine();
                 for (int j = 0; j < line.length(); ++j) {
@@ -74,7 +75,6 @@ public class GameController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 }
