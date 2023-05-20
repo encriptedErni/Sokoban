@@ -13,8 +13,8 @@ public class GameFrame  extends JFrame{
         addKeyListener(new GameKeyListener(gameController, boardPanel));
         setLocationRelativeTo(null);
         setVisible(true);
-        setSize(50 * gameController.getCols(),50 * gameController.getRows());
         pack();
+        setSize(50 * gameController.getCols(),50 * gameController.getRows());
     }
 }
 
