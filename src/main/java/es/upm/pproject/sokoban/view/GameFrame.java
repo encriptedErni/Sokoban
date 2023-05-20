@@ -14,6 +14,7 @@ public class GameFrame  extends JFrame{
         setLocationRelativeTo(null);
         setVisible(true);
         setSize(50 * gameController.getCols(),50 * gameController.getRows());
+        pack();
     }
 }
 
