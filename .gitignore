@@ -3,6 +3,7 @@
 # Edit at https://www.gitignore.io/?templates=java,maven,eclipse,intellij+all,visualstudiocode
 
 .metadata
+.DS_Store
 bin/
 tmp/
 *.tmp

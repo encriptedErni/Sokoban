@@ -17,7 +17,7 @@ import javax.imageio.ImageIO;
 
 
 public class GamePanel extends JPanel {
-	private int CELL_SIZE = 50;
+
 	private final int rows, cols;
 	private final HashMap<Position, Square> board;
 	private final Image wall, box, goalPosition, warehouseMan, floor;
@@ -34,7 +34,7 @@ public class GamePanel extends JPanel {
 		floor = loadImage("./sprites/floor.png");
 		warehouseMan = loadImage("./sprites/warehouse-man.png");
     }
-    
+
     private Image loadImage(String imagePath) {
 		Image img = null;
         try {
@@ -47,32 +47,31 @@ public class GamePanel extends JPanel {
 	}
 
     private Image classToImage(Object o) {
-		Image img = null;
 
 		if (o instanceof Wall) {
-			img = wall;
+			return wall;
 		} else if (o instanceof Box) {
-			img = box;
+			return box;
 		} else if (o instanceof GoalPosition) {
-			img = goalPosition;
+			return goalPosition;
 		} else if (o instanceof WarehouseMan) {
-			img = warehouseMan;
+			return warehouseMan;
 		}
-		return img;
+		return null;
 	}
 
 
 
     @Override
     protected void paintComponent(Graphics g) {
+		int cellHeight=gameFrame.getHeight()/rows;
+		int cellWidth=gameFrame.getWidth()/cols;
 		super.paintComponent(g);
 		// CELL_SIZE = (gameFrame.getWidth()/rows)+(gameFrame.getHeight()/cols);
-		for (int i = 0; i < cols; ++i)
-			for (int j = 0; j < rows; ++j)
-				g.drawImage(floor, j * CELL_SIZE, i * CELL_SIZE, null, null);
-
-
-		board.forEach((pos, square) -> g.drawImage(classToImage(square), pos.getX() * CELL_SIZE,
-				pos.getY() * CELL_SIZE, CELL_SIZE, CELL_SIZE, null));
+		for (int i = 0; i < rows; ++i)
+			for (int j = 0; j < cols; ++j)
+				g.drawImage(floor, j * cellWidth, i * cellHeight, cellWidth, cellHeight,null);
+		board.forEach((pos, square) -> g.drawImage(classToImage(square), pos.getX() * cellWidth,
+				pos.getY() * cellHeight, cellWidth, cellHeight, null));
     }
 }
