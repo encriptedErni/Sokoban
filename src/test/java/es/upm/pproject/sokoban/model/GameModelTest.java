@@ -6,17 +6,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GameModelTest {
-    private HashMap<Position, Square> board;
+class GameModelTest {
+    private Map<Position, Square> board;
     @BeforeEach
     void initMap() {
         GameController gameController = new GameController();
-        board = (HashMap<Position, Square>) gameController.parse("level1.txt");
+        board = gameController.parse("level1.txt");
 
     }
 
@@ -64,19 +64,19 @@ public class GameModelTest {
     @Test
     void WarehouseManMovements () {
         WarehouseMan warehouseMan = (WarehouseMan) board.get(new Position(2, 4));
-        assertEquals(warehouseMan.getMovements(), 0);
+        assertEquals(0, warehouseMan.getMovements());
         warehouseMan.move('W');
-        assertEquals(warehouseMan.getMovements(), 0);
+        assertEquals(0, warehouseMan.getMovements());
         warehouseMan.move('N');
-        assertEquals(warehouseMan.getMovements(), 1);
+        assertEquals(1, warehouseMan.getMovements());
         warehouseMan.move('W');
-        assertEquals(warehouseMan.getMovements(), 2);
+        assertEquals(2, warehouseMan.getMovements());
         warehouseMan.move('W');
-        assertEquals(warehouseMan.getMovements(), 2);
+        assertEquals(2, warehouseMan.getMovements());
         warehouseMan.move('N');
         warehouseMan.move('E');
         warehouseMan.move('S');
-        assertEquals(warehouseMan.getMovements(), 5);
+        assertEquals(5, warehouseMan.getMovements());
 
     }
 }

@@ -1,18 +1,18 @@
 package es.upm.pproject.sokoban.model;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import es.upm.pproject.sokoban.interfaces.Square;
 
-public class Box extends Square {
+public class Box implements Square {
 
 		 private Position position;
-		 private HashMap board = new HashMap<Position, Square>();
+		 private Map<Position, Square> board;
 
-		 public Box(Position position, HashMap<Position, Square> board) {
+		 public Box(Position position, Map<Position, Square> board) {
 		        this.position = position;
 		        this.board = board;
-		    }
+		 }
 		 
 		 public boolean move(char way) {
 			 return false;
@@ -20,5 +20,4 @@ public class Box extends Square {
 		public Position getPosition() {
 			return position;
 		}
-
 }
