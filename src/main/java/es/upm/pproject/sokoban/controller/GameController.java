@@ -7,7 +7,6 @@ import es.upm.pproject.sokoban.model.Position;
 import es.upm.pproject.sokoban.model.Wall;
 import es.upm.pproject.sokoban.model.WarehouseMan;
 
-import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.Map;
 import java.util.HashMap;
@@ -16,9 +15,9 @@ public class GameController {
     private HashMap<Position, Square> board;
     private int rows;
     private int cols;
-
+    private String levelName;
     private WarehouseMan warehouseMan;
-    public HashMap<Position, Square> getBoard() {
+    public Map<Position, Square> getBoard() {
         return board;
     }
     public int getRows() {
@@ -28,20 +27,24 @@ public class GameController {
     	return cols;
     }
 
+    public String getLevelName() {
+        return levelName;
+    }
+
     public Map<Position, Square> parse(String fileName) {
         String path = "./levels/" + fileName;
         File fd = new File(path);
         try (BufferedReader br = new BufferedReader(new FileReader(fd))) {
             // Creating the map
-            board = new HashMap<>();
+            this.board = new HashMap<>();
 
             // Getting the level name
-            String level = br.readLine();
+            this.levelName = br.readLine();
 
             // Getting the dimensions of the board
             String[] dimensions = br.readLine().split(" ");
-            rows = Integer.parseInt(dimensions[0]);
-            cols = Integer.parseInt(dimensions[1]);
+            this.rows = Integer.parseInt(dimensions[0]);
+            this.cols = Integer.parseInt(dimensions[1]);
 
             // Getting the board itself
             String line;
@@ -56,46 +59,49 @@ public class GameController {
                             break;
                         case '+':
                             position = new Position(j, i);
-                            board.put(position, new Wall(position, board));
+                            this.board.put(position, new Wall(position));
                             break;
                         case '*':
                             position = new Position(j, i);
-                            board.put(position, new Box(position, board));
+                            this.board.put(position, new Box(position, this.board));
                             break;
                         case 'W':
                             position = new Position(j, i);
-                            warehouseMan = new WarehouseMan(position, board);
-                            board.put(position, warehouseMan);
+                            this.warehouseMan = new WarehouseMan(position, this.board);
+                            this.board.put(position, warehouseMan);
                             break;
                         case '#':
                             position = new Position(j, i);
-                            board.put(position, new GoalPosition(position, board));
+                            this.board.put(position, new GoalPosition(position, this.board));
+                            break;
+                        default:
                             break;
                     }
                 }
             }
-            return board;
+            return this.board;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return new HashMap<>();
     }
 
     // Moving character through board
     public void moveUp() {
-        warehouseMan.move('N');
+        this.warehouseMan.move('N');
     }
     public void moveDown() {
-        warehouseMan.move('S');
+        this.warehouseMan.move('S');
     }
     public void moveLeft(){
-        warehouseMan.move('W');
+        this.warehouseMan.move('W');
     }
     public void moveRight() {
-        warehouseMan.move('E');
+        this.warehouseMan.move('E');
     }
 
     // implement later
-    public void pause(){
+    public void pause() {
+        // TODO: the event handler of pausing the game. SPRINT-2
     }
 }

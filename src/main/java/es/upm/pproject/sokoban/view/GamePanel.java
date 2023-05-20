@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JPanel;
 
@@ -17,22 +17,25 @@ import javax.imageio.ImageIO;
 
 
 public class GamePanel extends JPanel {
-
-	private final int rows, cols;
-	private final HashMap<Position, Square> board;
-	private final Image wall, box, goalPosition, warehouseMan, floor;
-
+	private final int rows;
+	private final int cols;
+	private final Map<Position, Square> board;
+	private final transient Image wall;
+	private final transient Image box;
+	private final transient Image goalPosition;
+	private final transient Image warehouseMan;
+	private final transient Image floor;
 	private final GameFrame gameFrame;
-    public GamePanel(HashMap<Position,Square> board,int rows, int cols,GameFrame gameFrame) {
-        this.board =board;
+    public GamePanel(Map<Position,Square> board, int rows, int cols, GameFrame gameFrame) {
+        this.board = board;
 		this.rows = rows;
 		this.cols = cols;
 		this.gameFrame = gameFrame;
-        wall = loadImage("./sprites/wall.png");
-		box = loadImage("./sprites/box.png");
-		goalPosition = loadImage("./sprites/goal-position.png");
-		floor = loadImage("./sprites/floor.png");
-		warehouseMan = loadImage("./sprites/warehouse-man.png");
+        this.wall = loadImage("./sprites/wall.png");
+		this.box = loadImage("./sprites/box.png");
+		this.goalPosition = loadImage("./sprites/goal-position.png");
+		this.floor = loadImage("./sprites/floor.png");
+		this.warehouseMan = loadImage("./sprites/warehouse-man.png");
     }
 
     private Image loadImage(String imagePath) {
@@ -41,7 +44,7 @@ public class GamePanel extends JPanel {
             File imageFile = new File(imagePath);
             img = ImageIO.read(imageFile);
         } catch (IOException e) {
-            System.out.println("Failed to load the image: " + e.getMessage());
+            System.err.println("Failed to load the image: " + e.getMessage());
         }
 		return img;
 	}
@@ -49,13 +52,13 @@ public class GamePanel extends JPanel {
     private Image classToImage(Object o) {
 
 		if (o instanceof Wall) {
-			return wall;
+			return this.wall;
 		} else if (o instanceof Box) {
-			return box;
+			return this.box;
 		} else if (o instanceof GoalPosition) {
-			return goalPosition;
+			return this.goalPosition;
 		} else if (o instanceof WarehouseMan) {
-			return warehouseMan;
+			return this.warehouseMan;
 		}
 		return null;
 	}
@@ -64,10 +67,9 @@ public class GamePanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-		int cellHeight=gameFrame.getHeight()/rows;
-		int cellWidth=gameFrame.getWidth()/cols;
+		int cellHeight = gameFrame.getHeight()/rows;
+		int cellWidth = gameFrame.getWidth()/cols;
 		super.paintComponent(g);
-		// CELL_SIZE = (gameFrame.getWidth()/rows)+(gameFrame.getHeight()/cols);
 		for (int i = 0; i < rows; ++i)
 			for (int j = 0; j < cols; ++j)
 				g.drawImage(floor, j * cellWidth, i * cellHeight, cellWidth, cellHeight,null);

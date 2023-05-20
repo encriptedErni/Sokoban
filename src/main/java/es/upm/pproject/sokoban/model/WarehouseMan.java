@@ -2,10 +2,9 @@ package es.upm.pproject.sokoban.model;
 
 import es.upm.pproject.sokoban.interfaces.Square;
 import java.security.InvalidParameterException;
-import java.util.HashMap;
 import java.util.Map;
 
-public class WarehouseMan extends Square {
+public class WarehouseMan implements Square {
     private int movements = 0;
     private Position position;
     private Map<Position, Square> board;
@@ -18,21 +17,21 @@ public class WarehouseMan extends Square {
     private boolean checkPosition(Position newPosition, char way) {
         Square square;
         if (newPosition == null) return false;
-        if (board.containsKey(newPosition)) {
-            square = (Square) board.get(newPosition);
+        if ((square = this.board.get(newPosition)) != null) {
             if (!square.move(way)) {
                 return false;
             }
         }
+
         board.remove(position);
         this.position = newPosition;
-        movements++;
+        this.movements++;
         board.put(position, this);
         return true;
     }
 
     public boolean move(char way) {
-        Position newPosition = null;
+        Position newPosition;
         switch (way) {
             case 'N':
                 newPosition = new Position(position.getX(), position.getY() - 1);

@@ -6,8 +6,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class GameKeyListener implements KeyListener {
-    private GameController controller;
-    private GamePanel boardPanel;
+    private final GameController controller;
+    private final GamePanel boardPanel;
     public GameKeyListener(GameController controller, GamePanel boardPanel) {
         this.controller = controller;
         this.boardPanel = boardPanel;
@@ -18,19 +18,20 @@ public class GameKeyListener implements KeyListener {
         int keyCode = e.getKeyCode();
 
         if (isUp(keyCode)) {
-            controller.moveUp();
-            boardPanel.repaint();
+            this.controller.moveUp();
+            this.boardPanel.repaint();
         } else if (isDown(keyCode)) {
-            controller.moveDown();
-            boardPanel.repaint();
+            this.controller.moveDown();
+            this.boardPanel.repaint();
         } else if (isRight(keyCode)) {
-            controller.moveRight();
-            boardPanel.repaint();
+            this.controller.moveRight();
+            this.boardPanel.repaint();
         } else if (isLeft(keyCode)) {
-            controller.moveLeft();
-            boardPanel.repaint();
+            this.controller.moveLeft();
+            this.boardPanel.repaint();
         } else if (isPause(keyCode)) {
-           // controller.pause();
+            this.controller.pause();
+            this.boardPanel.repaint();
         }
     }
 
@@ -51,7 +52,11 @@ public class GameKeyListener implements KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent e){}
+    public void keyReleased(KeyEvent e){
+        // Not needed for our game, but necessary when implementing the interface
+    }
     @Override
-    public void keyTyped(KeyEvent e){}
+    public void keyTyped(KeyEvent e){
+        // Not needed for our game, but necessary when implementing the interface
+    }
 }
