@@ -81,7 +81,7 @@ public class GameController {
             }
             return this.board;
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("IOException");
         }
         return new HashMap<>();
     }
