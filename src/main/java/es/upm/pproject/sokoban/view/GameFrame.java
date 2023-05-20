@@ -23,7 +23,7 @@ public class GameFrame  extends JFrame{
         pack();
         setLocationRelativeTo(null); // Center the frame on the screen
         setVisible(true);
-        setSize(500,500);
+        setSize(1000,1000);
     }
     
     // main prueba
