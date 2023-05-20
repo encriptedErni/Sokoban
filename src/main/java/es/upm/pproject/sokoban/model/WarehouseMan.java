@@ -3,13 +3,14 @@ package es.upm.pproject.sokoban.model;
 import es.upm.pproject.sokoban.interfaces.Square;
 import java.security.InvalidParameterException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class WarehouseMan extends Square {
     private int movements = 0;
     private Position position;
-    private HashMap board;
+    private Map<Position, Square> board;
 
-    public WarehouseMan(Position position, HashMap<Position, Square> board) {
+    public WarehouseMan(Position position, Map<Position, Square> board) {
         this.position = position;
         this.board = board;
     }
