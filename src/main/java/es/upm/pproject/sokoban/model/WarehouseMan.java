@@ -8,8 +8,9 @@ public class WarehouseMan implements Square {
     private int movements = 0;
     private Position position;
     private Map<Position, Square> board;
+    private GoalPosition goalPosition = null;
 
-    public WarehouseMan(Position position, Map<Position, Square> board) {
+    public WarehouseMan(Position position, Map<Position, Square> board ) {
         this.position = position;
         this.board = board;
     }
@@ -22,9 +23,23 @@ public class WarehouseMan implements Square {
             if (!square.move(way)) {
                 return false;
             }
+            square = this.board.get(newPosition);
+            if (square instanceof GoalPosition) {
+                goalPosition = (GoalPosition) square;
+                board.remove(position);
+                this.position = newPosition;
+                this.movements++;
+                board.put(position, this);
+                return true;
+            }
         }
-
-        board.remove(position);
+        if (goalPosition != null) {
+           board.put(position,goalPosition);
+           goalPosition = null;
+        }
+        else {
+            board.remove(position);
+        }
         this.position = newPosition;
         this.movements++;
         board.put(position, this);

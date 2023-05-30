@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.swing.JPanel;
@@ -28,8 +29,9 @@ public class GamePanel extends JPanel {
 	private final transient Image warehouseMan;
 	private final transient Image floor;
 	private final GameFrame gameFrame;
-
 	private final GameController controller;
+
+
     public GamePanel(Map<Position,Square> board, int rows, int cols, GameFrame gameFrame,GameController controller) {
         this.board = board;
 		this.rows = rows;
@@ -60,7 +62,7 @@ public class GamePanel extends JPanel {
 		if (o instanceof Wall) {
 			return this.wall;
 		} else if (o instanceof Box) {
-			if(controller.hasWon()) {
+			if(((Box) o).getGoalPosition() != null) {
 				return this.box_win;
 			}
 			return this.box;

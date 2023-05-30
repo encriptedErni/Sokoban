@@ -9,6 +9,7 @@ public class Box implements Square {
 
 	private Position position;
 	private Map<Position, Square> board;
+		private GoalPosition goalPosition = null;
 
 	public Box(Position position, Map<Position, Square> board) {
 		this.position = position;
@@ -18,13 +19,26 @@ public class Box implements Square {
 	private boolean checkPosition(Position newPosition, char way) {
 		Square square;
 		if (newPosition == null) return false;
+
 		if ((square = this.board.get(newPosition)) != null) {
 			if (!square.move(way)) {
 				return false;
 			}
+			if (square instanceof GoalPosition) {
+				goalPosition = (GoalPosition) square;
+				board.remove(position);
+				this.position = newPosition;
+				board.put(position, this);
+				return true;
+			}
 		}
-
-		board.remove(position);
+		if (goalPosition != null) {
+			board.put(position,goalPosition);
+			goalPosition = null;
+		}
+		else {
+			board.remove(position);
+		}
 		this.position = newPosition;
 		board.put(position, this);
 		return true;
@@ -53,6 +67,9 @@ public class Box implements Square {
 	public Position getPosition() {
 			return position;
 		}
+	public GoalPosition getGoalPosition(){
+		return goalPosition;
+	}
 	public Map<Position, Square> getBoard() {
 		return board;
 	}
