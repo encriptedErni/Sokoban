@@ -17,6 +17,8 @@ public class GameController {
     private int cols;
     private String levelName;
     private WarehouseMan warehouseMan;
+    private Box box;
+    private GoalPosition goalPosition;
     public Map<Position, Square> getBoard() {
         return board;
     }
@@ -26,10 +28,10 @@ public class GameController {
     public int getCols() {
     	return cols;
     }
-
     public String getLevelName() {
         return levelName;
     }
+
 
     public Map<Position, Square> parse(String fileName) {
         String path = "./levels/" + fileName;
@@ -63,7 +65,8 @@ public class GameController {
                             break;
                         case '*':
                             position = new Position(j, i);
-                            this.board.put(position, new Box(position, this.board));
+                            this.box = new Box(position, this.board);
+                            this.board.put(position, box);
                             break;
                         case 'W':
                             position = new Position(j, i);
@@ -72,7 +75,8 @@ public class GameController {
                             break;
                         case '#':
                             position = new Position(j, i);
-                            this.board.put(position, new GoalPosition(position, this.board));
+                            this.goalPosition = new GoalPosition(position, this.board);
+                            this.board.put(position, goalPosition);
                             break;
                         default:
                             break;
@@ -98,6 +102,13 @@ public class GameController {
     }
     public void moveRight() {
         this.warehouseMan.move('E');
+    }
+
+    public boolean hasWon(){
+        if(this.box.getPosition().equals(this.goalPosition.getPosition())){
+            return true;
+        }
+        return false;
     }
 
     // implement later

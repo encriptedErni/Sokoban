@@ -14,8 +14,12 @@ public class GoalPosition implements Square {
         this.board = board;
     }
 
+    public boolean isLevelWon(Box box){
+        Position boxPosition = box.getPosition();
+        return position.equals(boxPosition);
+    }
     public boolean move(char way) {
-        return false;
+        return true;
     }
 
     public Position getPosition() {
