@@ -1,6 +1,7 @@
 package es.upm.pproject.sokoban.view;
 
 import es.upm.pproject.sokoban.controller.GameController;
+import es.upm.pproject.sokoban.model.GoalPosition;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -12,11 +13,9 @@ public class GameKeyListener implements KeyListener {
         this.controller = controller;
         this.boardPanel = boardPanel;
     }
-
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
-
         if (isUp(keyCode)) {
             this.controller.moveUp();
             this.boardPanel.repaint();

@@ -17,6 +17,7 @@ public class WarehouseMan implements Square {
     private boolean checkPosition(Position newPosition, char way) {
         Square square;
         if (newPosition == null) return false;
+
         if ((square = this.board.get(newPosition)) != null) {
             if (!square.move(way)) {
                 return false;

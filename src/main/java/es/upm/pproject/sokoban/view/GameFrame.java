@@ -8,7 +8,7 @@ public class GameFrame  extends JFrame{
     public GameFrame(GameController gameController) {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sokoban - " + gameController.getLevelName());
-        GamePanel boardPanel = new GamePanel(gameController.getBoard(),gameController.getRows(),gameController.getCols(),this);
+        GamePanel boardPanel = new GamePanel(gameController.getBoard(),gameController.getRows(),gameController.getCols(),this,gameController);
         add(boardPanel);
         addKeyListener(new GameKeyListener(gameController, boardPanel));
         setLocationRelativeTo(null);
