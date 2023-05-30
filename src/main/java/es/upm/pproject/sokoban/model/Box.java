@@ -21,15 +21,14 @@ public class Box implements Square {
 		if (newPosition == null) return false;
 
 		if ((square = this.board.get(newPosition)) != null) {
-			if (!square.move(way)) {
-				return false;
-			}
 			if (square instanceof GoalPosition) {
 				goalPosition = (GoalPosition) square;
 				board.remove(position);
 				this.position = newPosition;
 				board.put(position, this);
 				return true;
+			} else {
+				return false;
 			}
 		}
 		if (goalPosition != null) {
