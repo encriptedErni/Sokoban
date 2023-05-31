@@ -11,7 +11,6 @@ public class Main {
             GameController game = new GameController();
             game.parse("level1.txt");
             SwingUtilities.invokeLater(() -> new GameFrame(game));
-            // try to invoke parse level 2
         } catch (Exception e) {
             System.err.println("Something went wrong!" + e);
         }

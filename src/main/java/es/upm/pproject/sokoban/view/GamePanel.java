@@ -2,13 +2,13 @@ package es.upm.pproject.sokoban.view;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Map;
 
-import javax.swing.JPanel;
-import java.awt.image.BufferedImage;
+import javax.swing.*;
 
 import es.upm.pproject.sokoban.controller.GameController;
 import es.upm.pproject.sokoban.interfaces.Square;
@@ -31,6 +31,11 @@ public class GamePanel extends JPanel {
 	private final GameFrame gameFrame;
 	private final GameController controller;
 
+	private Action moveUp;
+	private Action moveDown;
+	private Action moveLeft;
+	private Action moveRight;
+
 
     public GamePanel(Map<Position,Square> board, int rows, int cols, GameFrame gameFrame,GameController controller) {
         this.board = board;
@@ -40,12 +45,14 @@ public class GamePanel extends JPanel {
 		this.controller = controller;
         this.wall = loadImage("./sprites/wall.png");
 		this.box = loadImage("./sprites/box.png");
-		this.box_win = loadImage("./sprites/box_win.png");
+		this.box_win = loadImage("./sprites/box_win.png").;
 		this.goalPosition = loadImage("./sprites/goal-position.png");
 		this.floor = loadImage("./sprites/floor.png");
 		this.warehouseMan = loadImage("./sprites/warehouse-man.png");
-    }
 
+		setActions();
+		setKeys();
+    }
 
     private Image loadImage(String imagePath) {
 		Image img = null;
@@ -73,6 +80,63 @@ public class GamePanel extends JPanel {
 		}
 		return null;
 	}
+
+	private void setKeys() {
+		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "moveUpArrow");
+		getActionMap().put("moveUpArrow", moveUp);
+		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0), "moveUpW");
+		getActionMap().put("moveUpW", moveUp);
+
+		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "moveDownArrow");
+		getActionMap().put("moveDownArrow", moveDown);
+		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0), "moveDownS");
+		getActionMap().put("moveDownS", moveDown);
+
+		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "moveLeftArrow");
+		getActionMap().put("moveLeftArrow", moveLeft);
+		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0), "moveLeftA");
+		getActionMap().put("moveLeftA", moveLeft);
+
+		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "moveRightArrow");
+		getActionMap().put("moveRightArrow", moveRight);
+		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0), "moveRightD");
+		getActionMap().put("moveRightD", moveRight);
+	}
+
+	private void setActions() {
+		this.moveUp = new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.moveUp();
+				repaint();
+			}
+		};
+
+		this.moveDown = new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.moveDown();
+				repaint();
+			}
+		};
+
+		this.moveLeft = new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.moveLeft();
+				repaint();
+			}
+		};
+
+		this.moveRight = new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.moveRight();
+				repaint();
+			}
+		};
+	}
+
     @Override
     protected void paintComponent(Graphics g) {
 		int cellHeight = gameFrame.getHeight()/rows;
