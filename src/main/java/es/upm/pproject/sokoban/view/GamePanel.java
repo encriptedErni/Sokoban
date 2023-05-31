@@ -45,7 +45,7 @@ public class GamePanel extends JPanel {
 		this.controller = controller;
         this.wall = loadImage("./sprites/wall.png");
 		this.box = loadImage("./sprites/box.png");
-		this.box_win = loadImage("./sprites/box_win.png").;
+		this.box_win = loadImage("./sprites/box_win.png");
 		this.goalPosition = loadImage("./sprites/goal-position.png");
 		this.floor = loadImage("./sprites/floor.png");
 		this.warehouseMan = loadImage("./sprites/warehouse-man.png");
