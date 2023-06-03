@@ -33,7 +33,9 @@
         <sonar.language>java</sonar.language>
         <sonar.host.url>https://costa.ls.fi.upm.es/sonar</sonar.host.url>
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
+        <!--suppress UnresolvedMavenProperty -->
         <sonar.projectName>${project.name}-${sonar.id}</sonar.projectName>
+        <!--suppress UnresolvedMavenProperty -->
         <sonar.projectKey>${project.groupId}:${project.artifactId}:${sonar.projectName}:${sonar.id}</sonar.projectKey>
         <!-- Files to be excluded from coverage. Define for the view+controller
             in your final projects -->

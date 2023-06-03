@@ -12,39 +12,47 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class GameController {
-    public HashMap<Position, Square> board;
+    private HashMap<Position, Square> board;
     private int rows;
     private int cols;
-
+    private String levelName;
+    private WarehouseMan warehouseMan;
+    private Box box;
+    private GoalPosition goalPosition;
+    public Map<Position, Square> getBoard() {
+        return board;
+    }
     public int getRows() {
     	return rows;
     }
-    
     public int getCols() {
     	return cols;
     }
+    public String getLevelName() {
+        return levelName;
+    }
+
 
     public Map<Position, Square> parse(String fileName) {
         String path = "./levels/" + fileName;
         File fd = new File(path);
         try (BufferedReader br = new BufferedReader(new FileReader(fd))) {
             // Creating the map
-            board = new HashMap<>();
+            this.board = new HashMap<>();
 
             // Getting the level name
-            String level = br.readLine();
+            this.levelName = br.readLine();
 
             // Getting the dimensions of the board
             String[] dimensions = br.readLine().split(" ");
-            rows = Integer.parseInt(dimensions[0]);
-            cols = Integer.parseInt(dimensions[1]);
+            this.rows = Integer.parseInt(dimensions[0]);
+            this.cols = Integer.parseInt(dimensions[1]);
 
             // Getting the board itself
             String line;
             Position position;
-            
-            
-            for (int i = rows - 1; i >= 0; --i) {
+
+            for (int i = 0; i < rows; ++i) {
                 line = br.readLine();
                 for (int j = 0; j < line.length(); ++j) {
                     switch (line.charAt(j)) {
@@ -53,28 +61,58 @@ public class GameController {
                             break;
                         case '+':
                             position = new Position(j, i);
-                            board.put(position, new Wall(position, board));
+                            this.board.put(position, new Wall(position));
                             break;
                         case '*':
                             position = new Position(j, i);
-                            board.put(position, new Box(position, board));
+                            this.box = new Box(position, this.board);
+                            this.board.put(position, box);
                             break;
                         case 'W':
                             position = new Position(j, i);
-                            board.put(position, new WarehouseMan(position, board));
+                            this.warehouseMan = new WarehouseMan(position, this.board);
+                            this.board.put(position, warehouseMan);
                             break;
                         case '#':
                             position = new Position(j, i);
-                            board.put(position, new GoalPosition(position, board));
+                            this.goalPosition = new GoalPosition(position, this.board);
+                            this.board.put(position, goalPosition);
+                            break;
+                        default:
                             break;
                     }
                 }
             }
-            return board;
+            return this.board;
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("IOException");
         }
+        return new HashMap<>();
+    }
 
-        return null;
+    // Moving character through board
+    public void moveUp() {
+        this.warehouseMan.move('N');
+    }
+    public void moveDown() {
+        this.warehouseMan.move('S');
+    }
+    public void moveLeft(){
+        this.warehouseMan.move('W');
+    }
+    public void moveRight() {
+        this.warehouseMan.move('E');
+    }
+
+    public boolean hasWon(){
+        if(this.box.getPosition().equals(this.goalPosition.getPosition())){
+            return true;
+        }
+        return false;
+    }
+
+    // implement later
+    public void pause() {
+        // TODO: the event handler of pausing the game. SPRINT-2
     }
 }

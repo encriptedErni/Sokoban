@@ -2,7 +2,8 @@ package es.upm.pproject.sokoban.model;
 
 public class Position {
 
-    private int x, y;
+    private int x;
+    private int y;
     public Position(int x, int y) {
         this.x = x;
         this.y = y;
@@ -12,16 +13,8 @@ public class Position {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
     public int getY() {
         return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 
     @Override
@@ -33,10 +26,8 @@ public class Position {
             return false;
         }
         Position p = (Position) o;
-        if (p.getX() == this.x && p.getY() == this.y) {
-            return true;
-        }
-        return false;
+        
+        return p.getX() == this.x && p.getY() == this.y;
     }
     @Override
     public int hashCode() {

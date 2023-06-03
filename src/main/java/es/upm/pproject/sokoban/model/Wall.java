@@ -1,22 +1,18 @@
 package es.upm.pproject.sokoban.model;
 
-import java.util.HashMap;
-
 import es.upm.pproject.sokoban.interfaces.Square;
 
-public class Wall extends Square{
+public class Wall implements Square{
 	 private Position position;
-	 private HashMap board = new HashMap<Position, Square>();
 
-	 public Wall(Position position, HashMap<Position, Square> board) {
+	 public Wall(Position position) {
 	        this.position = position;
-	        this.board = board;
 	    }
 	 
 	 public boolean move(char way) {
 		 return false;
 	 }
-	public Position getPosition() {
+	 public Position getPosition() {
 		return position;
 	}
 }
