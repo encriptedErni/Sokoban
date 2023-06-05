@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class GameController {
-    private HashMap<Position, Square> board;
+    private final HashMap<Position, Square> board = new HashMap<>();
     private int rows;
     private int cols;
     private String levelName;
@@ -37,9 +37,6 @@ public class GameController {
         String path = "./levels/" + fileName;
         File fd = new File(path);
         try (BufferedReader br = new BufferedReader(new FileReader(fd))) {
-            // Creating the map
-            this.board = new HashMap<>();
-
             // Getting the level name
             this.levelName = br.readLine();
 
@@ -105,14 +102,16 @@ public class GameController {
     }
 
     public boolean hasWon(){
-        if(this.box.getPosition().equals(this.goalPosition.getPosition())){
-            return true;
-        }
-        return false;
+        return this.box.getPosition().equals(this.goalPosition.getPosition());
     }
 
     // implement later
     public void pause() {
         // TODO: the event handler of pausing the game. SPRINT-2
+    }
+
+    public void restartGame() {
+        this.board.clear();
+        parse("level1.txt");
     }
 }

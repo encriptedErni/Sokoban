@@ -21,7 +21,7 @@ import javax.imageio.ImageIO;
 public class GamePanel extends JPanel {
 	private final int rows;
 	private final int cols;
-	private final Map<Position, Square> board;
+	private Map<Position, Square> board;
 	private final transient Image wall;
 	private final transient Image box;
 	private final transient Image box_win;
@@ -145,6 +145,7 @@ public class GamePanel extends JPanel {
 		for (int i = 0; i < rows; ++i)
 			for (int j = 0; j < cols; ++j)
 				g.drawImage(floor, j * cellWidth, i * cellHeight, cellWidth, cellHeight,null);
+
 		board.forEach((pos, square) -> g.drawImage(classToImage(square), pos.getX() * cellWidth,
 				pos.getY() * cellHeight, cellWidth, cellHeight, null));
     }

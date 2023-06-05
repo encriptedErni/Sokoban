@@ -26,9 +26,21 @@ public class GameFrame extends JFrame {
 
         setContentPane(contentPane);
 
+        setJMenuBar(newMenuBar());
         setLocationRelativeTo(null);
         pack();
         setSize(50 * gameController.getCols(), 50 * gameController.getRows());
         setVisible(true);
+    }
+
+    private JMenuBar newMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        JMenuItem restart = new JMenuItem("Restart");
+        restart.addActionListener(e -> {
+            gameController.restartGame();
+            boardPanel.repaint();
+        });
+        menuBar.add(restart);
+        return menuBar;
     }
 }
