@@ -15,10 +15,11 @@ import es.upm.pproject.sokoban.interfaces.Square;
 import es.upm.pproject.sokoban.model.*;
 import es.upm.pproject.sokoban.model.Box;
 
-
 import javax.imageio.ImageIO;
 
 public class GamePanel extends JPanel {
+	private GameMovementCounter gameMovementCounter;
+	private LevelMovementCounter levelMovementCounter;
 	private final int rows;
 	private final int cols;
 	private Map<Position, Square> board;
@@ -30,14 +31,13 @@ public class GamePanel extends JPanel {
 	private final transient Image floor;
 	private final GameFrame gameFrame;
 	private final GameController controller;
-
 	private Action moveUp;
 	private Action moveDown;
 	private Action moveLeft;
 	private Action moveRight;
 
 
-    public GamePanel(Map<Position,Square> board, int rows, int cols, GameFrame gameFrame,GameController controller) {
+    public GamePanel(Map<Position,Square> board, int rows, int cols, GameFrame gameFrame,GameController controller, GameMovementCounter gameMovementCounter, LevelMovementCounter levelMovementCounter) {
         this.board = board;
 		this.rows = rows;
 		this.cols = cols;
@@ -49,6 +49,8 @@ public class GamePanel extends JPanel {
 		this.goalPosition = loadImage("./sprites/goal-position.png");
 		this.floor = loadImage("./sprites/floor.png");
 		this.warehouseMan = loadImage("./sprites/warehouse-man.png");
+		this.gameMovementCounter = gameMovementCounter;
+		this.levelMovementCounter = levelMovementCounter;
 
 		setActions();
 		setKeys();
@@ -108,6 +110,8 @@ public class GamePanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				controller.moveUp();
+				gameMovementCounter.incrementMovementCount();
+				levelMovementCounter.incrementMovementCount();
 				repaint();
 			}
 		};
@@ -116,6 +120,8 @@ public class GamePanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				controller.moveDown();
+				gameMovementCounter.incrementMovementCount();
+				levelMovementCounter.incrementMovementCount();
 				repaint();
 			}
 		};
@@ -124,6 +130,8 @@ public class GamePanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				controller.moveLeft();
+				gameMovementCounter.incrementMovementCount();
+				levelMovementCounter.incrementMovementCount();
 				repaint();
 			}
 		};
@@ -132,6 +140,8 @@ public class GamePanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				controller.moveRight();
+				gameMovementCounter.incrementMovementCount();
+				levelMovementCounter.incrementMovementCount();
 				repaint();
 			}
 		};

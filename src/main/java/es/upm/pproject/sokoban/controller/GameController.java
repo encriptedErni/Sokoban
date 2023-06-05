@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class GameController {
+    private static final int MAX_LEVELS = 3;
     private final HashMap<Position, Square> board = new HashMap<>();
     private int rows;
     private int cols;
@@ -19,6 +20,12 @@ public class GameController {
     private WarehouseMan warehouseMan;
     private Box box;
     private GoalPosition goalPosition;
+    private int actualLevel;
+
+    public GameController() {
+        this.actualLevel = 1;
+    }
+
     public Map<Position, Square> getBoard() {
         return board;
     }
@@ -32,9 +39,8 @@ public class GameController {
         return levelName;
     }
 
-
-    public Map<Position, Square> parse(String fileName) {
-        String path = "./levels/" + fileName;
+    public Map<Position, Square> parse(int levelNumber) {
+        String path = "./levels/level" + levelNumber + ".txt";
         File fd = new File(path);
         try (BufferedReader br = new BufferedReader(new FileReader(fd))) {
             // Getting the level name
@@ -110,8 +116,40 @@ public class GameController {
         // TODO: the event handler of pausing the game. SPRINT-2
     }
 
+    public void startNewGame() {
+        this.board.clear();
+        this.actualLevel = 1;
+        parse(this.actualLevel);
+    }
+
     public void restartGame() {
         this.board.clear();
-        parse("level1.txt");
+        parse(this.actualLevel);
+    }
+
+    public void undoMovement() {
+        // TODO: Implement the logic of undoing a movement
+    }
+
+    public void nextLevel() {
+        this.board.clear();
+        this.actualLevel++;
+        if (actualLevel == MAX_LEVELS) {
+            // TODO: Print congrats message
+        } else {
+            parse(this.actualLevel);
+        }
+    }
+
+    public void saveGame() {
+        // TODO: Implement the logic of saving a game
+    }
+
+    public void openSavedGame() {
+        // TODO: Implement the logic of opening a saved game
+    }
+
+    public void exitGame() {
+        System.exit(1);
     }
 }
