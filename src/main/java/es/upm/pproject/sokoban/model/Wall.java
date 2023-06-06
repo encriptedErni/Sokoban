@@ -11,10 +11,15 @@ public class Wall implements Square {
 	        this.position = position;
 	    }
 	 
-	 public boolean move(char way) {
+	 public boolean move(char way, int turn) {
 		 return false;
 	 }
-	 public Position getPosition() {
+
+	public void unmove(char way, int turn) {
+
+	}
+
+	public Position getPosition() {
 		return position;
 	}
 }

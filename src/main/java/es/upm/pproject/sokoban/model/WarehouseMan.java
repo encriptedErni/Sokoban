@@ -6,22 +6,32 @@ import java.security.InvalidParameterException;
 import java.util.Map;
 
 public class WarehouseMan implements Square {
-    private int movements = 0;
     private Position position;
-    private Map<Position, Square> board;
+    private final Map<Position, Square> board;
     private GoalPosition goalPosition = null;
 
     public WarehouseMan(Position position, Map<Position, Square> board ) {
         this.position = position;
         this.board = board;
     }
-
-    private boolean checkPosition(Position newPosition, char way) {
+    private boolean updateMap(Position newPosition){
+        if (goalPosition != null) {
+            board.put(position,goalPosition);
+            goalPosition = null;
+        }
+        else {
+            board.remove(position);
+        }
+        this.position = newPosition;
+        board.put(position, this);
+        return true;
+    }
+    private boolean checkPosition(Position newPosition, char way, int turn) {
         Square square;
         if (newPosition == null) return false;
 
         if ((square = this.board.get(newPosition)) != null) {
-            if (!square.move(way)) {
+            if (!square.move(way,turn)) {
                 return false;
             }
             square = this.board.get(newPosition);
@@ -29,25 +39,13 @@ public class WarehouseMan implements Square {
                 goalPosition = (GoalPosition) square;
                 board.remove(position);
                 this.position = newPosition;
-                this.movements++;
                 board.put(position, this);
                 return true;
             }
         }
-        if (goalPosition != null) {
-           board.put(position,goalPosition);
-           goalPosition = null;
-        }
-        else {
-            board.remove(position);
-        }
-        this.position = newPosition;
-        this.movements++;
-        board.put(position, this);
-        return true;
+        return updateMap(newPosition);
     }
-
-    public boolean move(char way) {
+    public boolean move(char way, int turn) {
         Position newPosition;
         switch (way) {
             case 'N':
@@ -65,15 +63,51 @@ public class WarehouseMan implements Square {
             default:
                 throw new InvalidParameterException("The warehouse man just can move N (north), S (south), E (east), W (west)");
         }
-        return checkPosition(newPosition, way);
+        return checkPosition(newPosition, way, turn);
     }
-
+    public void unmove(char way, int turn) {
+        Position oldPosition;
+        Position nextPosition;
+        Square square;
+        switch (way) {
+            case 'N':
+                oldPosition = new Position(position.getX(), position.getY() + 1);
+                nextPosition = new Position(position.getX(), position.getY() - 1);
+                break;
+            case 'S':
+                oldPosition = new Position(position.getX(), position.getY() - 1);
+                nextPosition = new Position(position.getX(), position.getY() + 1);
+                break;
+            case 'E':
+                oldPosition = new Position(position.getX() - 1, position.getY());
+                nextPosition = new Position(position.getX() + 1, position.getY());
+                break;
+            case 'W':
+                oldPosition = new Position(position.getX() + 1, position.getY());
+                nextPosition = new Position(position.getX() - 1, position.getY());
+                break;
+            default:
+                throw new InvalidParameterException("Unable to undo movement");
+        }
+        if (goalPosition != null) {
+            board.put(position,goalPosition);
+            goalPosition = null;
+        }
+        else {
+            board.remove(position);
+        }
+        square = this.board.get(oldPosition);
+        if (square instanceof GoalPosition) {
+            goalPosition = (GoalPosition) square;
+            board.remove(oldPosition);
+        }
+        this.position = oldPosition;
+        board.put(position, this);
+        if ((square = this.board.get(nextPosition)) != null) {
+            square.unmove(way, turn);
+        }
+    }
     public Position getPosition() {
         return position;
     }
-
-    public int getMovements() {
-        return movements;
-    }
-    
 }

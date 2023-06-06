@@ -10,10 +10,12 @@ import es.upm.pproject.sokoban.model.WarehouseMan;
 import java.io.*;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Stack;
 
 public class GameController {
     private static final int MAX_LEVELS = 3;
     private final HashMap<Position, Square> board = new HashMap<>();
+    private Stack<Character> movements = new Stack<Character>();
     private int rows;
     private int cols;
     private String levelName;
@@ -29,12 +31,15 @@ public class GameController {
     public Map<Position, Square> getBoard() {
         return board;
     }
+
     public int getRows() {
-    	return rows;
+        return rows;
     }
+
     public int getCols() {
-    	return cols;
+        return cols;
     }
+
     public String getLevelName() {
         return levelName;
     }
@@ -94,22 +99,30 @@ public class GameController {
     }
 
     // Moving character through board
-    public void moveUp() {
-        this.warehouseMan.move('N');
-    }
-    public void moveDown() {
-        this.warehouseMan.move('S');
-    }
-    public void moveLeft(){
-        this.warehouseMan.move('W');
-    }
-    public void moveRight() {
-        this.warehouseMan.move('E');
+    public void moveUp(int turn) {
+        if (this.warehouseMan.move('N', turn)) {
+            movements.push('N');
+        }
     }
 
-    public boolean hasWon(){
-        return this.box.getPosition().equals(this.goalPosition.getPosition());
+    public void moveDown(int turn) {
+        if (this.warehouseMan.move('S', turn)) {
+            movements.push('S');
+        }
     }
+
+    public void moveLeft(int turn) {
+        if (this.warehouseMan.move('W', turn)) {
+            movements.push('W');
+        }
+    }
+
+    public void moveRight(int turn) {
+        if (this.warehouseMan.move('E', turn)) {
+            movements.push('E');
+        }
+    }
+
 
     // implement later
     public void pause() {
@@ -127,8 +140,11 @@ public class GameController {
         parse(this.actualLevel);
     }
 
-    public void undoMovement() {
-        // TODO: Implement the logic of undoing a movement
+    public boolean undoMovement(int turn) {
+        if (movements.empty()) return false;
+        Character movement = movements.pop();
+        this.warehouseMan.unmove(movement, turn);
+        return true;
     }
 
     public void nextLevel() {
