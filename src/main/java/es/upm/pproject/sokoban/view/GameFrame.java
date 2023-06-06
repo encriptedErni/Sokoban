@@ -62,10 +62,11 @@ public class GameFrame extends JFrame {
 
         JMenuItem undoMovement = new JMenuItem("Undo");
         undoMovement.addActionListener(e -> {
-            this.levelMovementCounter.decrementMovementCount();
-            this.gameMovementCounter.decrementMovementCount();
-            gameController.undoMovement();
-            boardPanel.repaint();
+            if (gameController.undoMovement(levelMovementCounter.getMovementCount()-1)) {
+                this.levelMovementCounter.decrementMovementCount();
+                this.gameMovementCounter.decrementMovementCount();
+                boardPanel.repaint();
+            }
         });
 
         JMenuItem nextLevel = new JMenuItem("Next Level");
