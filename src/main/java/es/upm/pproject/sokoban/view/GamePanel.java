@@ -80,6 +80,8 @@ public class GamePanel extends JPanel {
 			numGoals++;
 			return this.goalPosition;
 		} else if (o instanceof WarehouseMan) {
+			if(((WarehouseMan) o).getGoalPosition() != null)
+				numGoals++;
 			return this.warehouseMan;
 		}
 		return null;
@@ -111,7 +113,7 @@ public class GamePanel extends JPanel {
 		this.moveUp = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gameController.moveUp(gameMovementCounter.getMovementCount());
+				gameController.moveUp(levelMovementCounter.getMovementCount());
 				gameMovementCounter.incrementMovementCount();
 				levelMovementCounter.incrementMovementCount();
 				repaint();
@@ -121,7 +123,7 @@ public class GamePanel extends JPanel {
 		this.moveDown = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gameController.moveDown(gameMovementCounter.getMovementCount());
+				gameController.moveDown(levelMovementCounter.getMovementCount());
 				gameMovementCounter.incrementMovementCount();
 				levelMovementCounter.incrementMovementCount();
 				repaint();
@@ -131,7 +133,7 @@ public class GamePanel extends JPanel {
 		this.moveLeft = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gameController.moveLeft(gameMovementCounter.getMovementCount());
+				gameController.moveLeft(levelMovementCounter.getMovementCount());
 				gameMovementCounter.incrementMovementCount();
 				levelMovementCounter.incrementMovementCount();
 				repaint();
@@ -141,7 +143,7 @@ public class GamePanel extends JPanel {
 		this.moveRight = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gameController.moveRight(gameMovementCounter.getMovementCount());
+				gameController.moveRight(levelMovementCounter.getMovementCount());
 				gameMovementCounter.incrementMovementCount();
 				levelMovementCounter.incrementMovementCount();
 				repaint();
