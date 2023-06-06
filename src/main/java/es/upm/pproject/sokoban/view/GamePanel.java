@@ -30,19 +30,20 @@ public class GamePanel extends JPanel {
 	private final transient Image warehouseMan;
 	private final transient Image floor;
 	private final GameFrame gameFrame;
-	private final GameController controller;
+	private final GameController gameController;
 	private Action moveUp;
 	private Action moveDown;
 	private Action moveLeft;
 	private Action moveRight;
 
+	private int numGoals = 0;
 
-    public GamePanel(Map<Position,Square> board, int rows, int cols, GameFrame gameFrame,GameController controller, GameMovementCounter gameMovementCounter, LevelMovementCounter levelMovementCounter) {
+    public GamePanel(Map<Position,Square> board, int rows, int cols, GameFrame gameFrame, GameController gameController, GameMovementCounter gameMovementCounter, LevelMovementCounter levelMovementCounter) {
         this.board = board;
 		this.rows = rows;
 		this.cols = cols;
 		this.gameFrame = gameFrame;
-		this.controller = controller;
+		this.gameController = gameController;
         this.wall = loadImage("./sprites/wall.png");
 		this.box = loadImage("./sprites/box.png");
 		this.box_win = loadImage("./sprites/box_win.png");
@@ -76,6 +77,7 @@ public class GamePanel extends JPanel {
 			}
 			return this.box;
 		} else if (o instanceof GoalPosition) {
+			numGoals++;
 			return this.goalPosition;
 		} else if (o instanceof WarehouseMan) {
 			return this.warehouseMan;
@@ -109,7 +111,7 @@ public class GamePanel extends JPanel {
 		this.moveUp = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.moveUp();
+				gameController.moveUp();
 				gameMovementCounter.incrementMovementCount();
 				levelMovementCounter.incrementMovementCount();
 				repaint();
@@ -119,7 +121,7 @@ public class GamePanel extends JPanel {
 		this.moveDown = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.moveDown();
+				gameController.moveDown();
 				gameMovementCounter.incrementMovementCount();
 				levelMovementCounter.incrementMovementCount();
 				repaint();
@@ -129,7 +131,7 @@ public class GamePanel extends JPanel {
 		this.moveLeft = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.moveLeft();
+				gameController.moveLeft();
 				gameMovementCounter.incrementMovementCount();
 				levelMovementCounter.incrementMovementCount();
 				repaint();
@@ -139,7 +141,7 @@ public class GamePanel extends JPanel {
 		this.moveRight = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.moveRight();
+				gameController.moveRight();
 				gameMovementCounter.incrementMovementCount();
 				levelMovementCounter.incrementMovementCount();
 				repaint();
@@ -149,6 +151,7 @@ public class GamePanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
+		numGoals=0;
 		int cellHeight = gameFrame.getHeight()/rows;
 		int cellWidth = gameFrame.getWidth()/cols;
 		super.paintComponent(g);
@@ -158,5 +161,10 @@ public class GamePanel extends JPanel {
 
 		board.forEach((pos, square) -> g.drawImage(classToImage(square), pos.getX() * cellWidth,
 				pos.getY() * cellHeight, cellWidth, cellHeight, null));
+		if(numGoals == 0){
+			this.levelMovementCounter.resetMovementCount();
+			gameController.nextLevel();
+			repaint();
+		}
     }
 }
