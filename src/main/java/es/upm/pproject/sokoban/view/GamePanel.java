@@ -168,7 +168,7 @@ public class GamePanel extends JPanel {
 			if(gameController.nextLevel()){
 
 			}else{
-				ImageIcon backgroundImage = new ImageIcon("./sprites/congrats.png"); // Replace "background.png" with your image path
+				ImageIcon backgroundImage = new ImageIcon("./sprites/end.jpg");
 				g.drawImage(backgroundImage.getImage(), 0, 0, gameFrame.getWidth(), gameFrame.getHeight(), null);
 				g.setColor(Color.BLACK);
 				g.setFont(new Font("Arial", Font.BOLD, 36));
