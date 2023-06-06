@@ -1,7 +1,6 @@
 package es.upm.pproject.sokoban.view;
 
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -163,9 +162,24 @@ public class GamePanel extends JPanel {
 
 		board.forEach((pos, square) -> g.drawImage(classToImage(square), pos.getX() * cellWidth,
 				pos.getY() * cellHeight, cellWidth, cellHeight, null));
-		if(numGoals == 0){
+
+		 if (numGoals == 0) {
 			this.levelMovementCounter.resetMovementCount();
-			gameController.nextLevel();
+			if(gameController.nextLevel()){
+
+			}else{
+				ImageIcon backgroundImage = new ImageIcon("./sprites/congrats.png"); // Replace "background.png" with your image path
+				g.drawImage(backgroundImage.getImage(), 0, 0, gameFrame.getWidth(), gameFrame.getHeight(), null);
+				g.setColor(Color.BLACK);
+				g.setFont(new Font("Arial", Font.BOLD, 36));
+				FontMetrics fm = g.getFontMetrics();
+				String message = "Congratulations!";
+				int messageWidth = fm.stringWidth(message);
+				int messageHeight = fm.getHeight();
+				int x = (gameFrame.getWidth() - messageWidth) / 2;
+				int y = (gameFrame.getHeight() - messageHeight) / 2;
+				g.drawString(message, x, y);
+			}
 			repaint();
 		}
     }
