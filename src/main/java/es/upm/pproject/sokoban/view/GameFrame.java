@@ -40,6 +40,19 @@ public class GameFrame extends JFrame {
         setVisible(true);
     }
 
+    public void showCongratulationsMessage() {
+        JLabel congratulationsLabel = new JLabel("Congratulations!");
+        congratulationsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        congratulationsLabel.setVerticalAlignment(SwingConstants.CENTER);
+        congratulationsLabel.setFont(new Font("Arial", Font.BOLD, 24));
+
+        JPanel messagePanel = new JPanel(new BorderLayout());
+        messagePanel.add(congratulationsLabel, BorderLayout.CENTER);
+
+        boardPanel.add(messagePanel);
+        boardPanel.repaint();
+    }
+
     private JMenuBar newMenuBar() {
         JMenuBar menuBar = new JMenuBar();
 
@@ -72,8 +85,12 @@ public class GameFrame extends JFrame {
         JMenuItem nextLevel = new JMenuItem("Next Level");
         nextLevel.addActionListener(e -> {
             this.levelMovementCounter.resetMovementCount();
-            gameController.nextLevel();
-            boardPanel.repaint();
+            if(gameController.nextLevel()) {
+                boardPanel.repaint();
+            }
+            else{
+
+            }
         });
 
         JMenuItem saveGame = new JMenuItem("Save Game");

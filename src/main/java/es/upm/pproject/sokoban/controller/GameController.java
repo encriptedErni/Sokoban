@@ -6,7 +6,9 @@ import es.upm.pproject.sokoban.model.GoalPosition;
 import es.upm.pproject.sokoban.model.Position;
 import es.upm.pproject.sokoban.model.Wall;
 import es.upm.pproject.sokoban.model.WarehouseMan;
+import es.upm.pproject.sokoban.view.GameFrame;
 
+import javax.swing.*;
 import java.io.*;
 import java.util.Map;
 import java.util.HashMap;
@@ -94,6 +96,7 @@ public class GameController {
             return this.board;
         } catch (IOException e) {
             System.err.println("IOException");
+          //  System.out.println("Game finished");
         }
         return new HashMap<>();
     }
@@ -147,14 +150,15 @@ public class GameController {
         return true;
     }
 
-    public void nextLevel() {
+    public boolean nextLevel() {
         this.board.clear();
-        this.actualLevel++;
         movements.clear();
-        if (actualLevel == MAX_LEVELS) {
-            // TODO: Print congrats message
+        if (this.actualLevel == MAX_LEVELS) {
+            return false;
         } else {
+            this.actualLevel++;
             parse(this.actualLevel);
+            return true;
         }
     }
 
