@@ -150,6 +150,7 @@ public class GameController {
     public void nextLevel() {
         this.board.clear();
         this.actualLevel++;
+        movements.clear();
         if (actualLevel == MAX_LEVELS) {
             // TODO: Print congrats message
         } else {

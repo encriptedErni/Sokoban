@@ -10,28 +10,29 @@ public class WarehouseMan implements Square {
     private final Map<Position, Square> board;
     private GoalPosition goalPosition = null;
 
-    public WarehouseMan(Position position, Map<Position, Square> board ) {
+    public WarehouseMan(Position position, Map<Position, Square> board) {
         this.position = position;
         this.board = board;
     }
-    private boolean updateMap(Position newPosition){
+
+    private boolean updateMap(Position newPosition) {
         if (goalPosition != null) {
-            board.put(position,goalPosition);
+            board.put(position, goalPosition);
             goalPosition = null;
-        }
-        else {
+        } else {
             board.remove(position);
         }
         this.position = newPosition;
         board.put(position, this);
         return true;
     }
+
     private boolean checkPosition(Position newPosition, char way, int turn) {
         Square square;
         if (newPosition == null) return false;
 
         if ((square = this.board.get(newPosition)) != null) {
-            if (!square.move(way,turn)) {
+            if (!square.move(way, turn)) {
                 return false;
             }
             square = this.board.get(newPosition);
@@ -45,6 +46,7 @@ public class WarehouseMan implements Square {
         }
         return updateMap(newPosition);
     }
+
     public boolean move(char way, int turn) {
         Position newPosition;
         switch (way) {
@@ -65,6 +67,7 @@ public class WarehouseMan implements Square {
         }
         return checkPosition(newPosition, way, turn);
     }
+
     public void unmove(char way, int turn) {
         Position oldPosition;
         Position nextPosition;
@@ -90,10 +93,9 @@ public class WarehouseMan implements Square {
                 throw new InvalidParameterException("Unable to undo movement");
         }
         if (goalPosition != null) {
-            board.put(position,goalPosition);
+            board.put(position, goalPosition);
             goalPosition = null;
-        }
-        else {
+        } else {
             board.remove(position);
         }
         square = this.board.get(oldPosition);
@@ -107,6 +109,11 @@ public class WarehouseMan implements Square {
             square.unmove(way, turn);
         }
     }
+
+    public GoalPosition getGoalPosition() {
+        return goalPosition;
+    }
+
     public Position getPosition() {
         return position;
     }
