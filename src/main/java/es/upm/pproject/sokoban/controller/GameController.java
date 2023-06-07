@@ -6,40 +6,50 @@ import es.upm.pproject.sokoban.model.GoalPosition;
 import es.upm.pproject.sokoban.model.Position;
 import es.upm.pproject.sokoban.model.Wall;
 import es.upm.pproject.sokoban.model.WarehouseMan;
+import es.upm.pproject.sokoban.view.GameFrame;
 
+import javax.swing.*;
 import java.io.*;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Stack;
 
 public class GameController {
-    private HashMap<Position, Square> board;
+    private static final int MAX_LEVELS = 3;
+    private final HashMap<Position, Square> board = new HashMap<>();
+    private Stack<Character> movements = new Stack<Character>();
     private int rows;
     private int cols;
     private String levelName;
     private WarehouseMan warehouseMan;
     private Box box;
     private GoalPosition goalPosition;
+    private int actualLevel;
+
+    public GameController() {
+        this.actualLevel = 1;
+    }
+
     public Map<Position, Square> getBoard() {
         return board;
     }
+
     public int getRows() {
-    	return rows;
+        return rows;
     }
+
     public int getCols() {
-    	return cols;
+        return cols;
     }
+
     public String getLevelName() {
         return levelName;
     }
 
-
-    public Map<Position, Square> parse(String fileName) {
-        String path = "./levels/" + fileName;
+    public Map<Position, Square> parse(int levelNumber) {
+        String path = "./levels/level" + levelNumber + ".txt";
         File fd = new File(path);
         try (BufferedReader br = new BufferedReader(new FileReader(fd))) {
-            // Creating the map
-            this.board = new HashMap<>();
-
             // Getting the level name
             this.levelName = br.readLine();
 
@@ -86,33 +96,81 @@ public class GameController {
             return this.board;
         } catch (IOException e) {
             System.err.println("IOException");
+          //  System.out.println("Game finished");
         }
         return new HashMap<>();
     }
 
     // Moving character through board
-    public void moveUp() {
-        this.warehouseMan.move('N');
-    }
-    public void moveDown() {
-        this.warehouseMan.move('S');
-    }
-    public void moveLeft(){
-        this.warehouseMan.move('W');
-    }
-    public void moveRight() {
-        this.warehouseMan.move('E');
+    public void moveUp(int turn) {
+        if (this.warehouseMan.move('N', turn)) {
+            movements.push('N');
+        }
     }
 
-    public boolean hasWon(){
-        if(this.box.getPosition().equals(this.goalPosition.getPosition())){
-            return true;
+    public void moveDown(int turn) {
+        if (this.warehouseMan.move('S', turn)) {
+            movements.push('S');
         }
-        return false;
     }
+
+    public void moveLeft(int turn) {
+        if (this.warehouseMan.move('W', turn)) {
+            movements.push('W');
+        }
+    }
+
+    public void moveRight(int turn) {
+        if (this.warehouseMan.move('E', turn)) {
+            movements.push('E');
+        }
+    }
+
 
     // implement later
     public void pause() {
         // TODO: the event handler of pausing the game. SPRINT-2
+    }
+
+    public void startNewGame() {
+        this.board.clear();
+        this.actualLevel = 1;
+        parse(this.actualLevel);
+    }
+
+    public void restartGame() {
+        this.board.clear();
+        parse(this.actualLevel);
+    }
+
+    public boolean undoMovement(int turn) {
+        if (movements.empty()) return false;
+        Character movement = movements.pop();
+        this.warehouseMan.unmove(movement, turn);
+        return true;
+    }
+
+    public boolean nextLevel() {
+        this.board.clear();
+        movements.clear();
+        if (this.actualLevel == MAX_LEVELS) {
+            return false;
+        } else {
+            this.actualLevel++;
+            parse(this.actualLevel);
+            return true;
+        }
+    }
+
+    public void saveGame() {
+        // TODO: Implement the logic of saving a game
+    }
+
+    public void openSavedGame() {
+        // TODO: Implement the logic of opening a saved game
+    }
+
+    public void exitGame() {
+        System.exit(1);
     }
 }

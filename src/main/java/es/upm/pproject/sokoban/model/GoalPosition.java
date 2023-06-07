@@ -1,5 +1,6 @@
 package es.upm.pproject.sokoban.model;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
@@ -20,8 +21,12 @@ public class GoalPosition implements Square {
         Position boxPosition = box.getPosition();
         return position.equals(boxPosition);
     }
-    public boolean move(char way) {
+    public boolean move(char way, int turn) {
         return true;
+    }
+
+    public void unmove(char way, int turn) {
+
     }
 
     public Position getPosition() {

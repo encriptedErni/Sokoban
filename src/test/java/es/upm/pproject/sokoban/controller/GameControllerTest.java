@@ -18,7 +18,7 @@ class GameControllerTest {
     @BeforeEach
     void initMap() {
         GameController gameController = new GameController();
-        board = gameController.parse("level1.txt");
+        board = gameController.parse(1);
 
     }
 

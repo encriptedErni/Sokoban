@@ -1,7 +1,6 @@
 package es.upm.pproject.sokoban.view;
 
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -15,13 +14,14 @@ import es.upm.pproject.sokoban.interfaces.Square;
 import es.upm.pproject.sokoban.model.*;
 import es.upm.pproject.sokoban.model.Box;
 
-
 import javax.imageio.ImageIO;
 
 public class GamePanel extends JPanel {
+	private GameMovementCounter gameMovementCounter;
+	private LevelMovementCounter levelMovementCounter;
 	private final int rows;
 	private final int cols;
-	private final Map<Position, Square> board;
+	private Map<Position, Square> board;
 	private final transient Image wall;
 	private final transient Image box;
 	private final transient Image box_win;
@@ -29,26 +29,28 @@ public class GamePanel extends JPanel {
 	private final transient Image warehouseMan;
 	private final transient Image floor;
 	private final GameFrame gameFrame;
-	private final GameController controller;
-
+	private final GameController gameController;
 	private Action moveUp;
 	private Action moveDown;
 	private Action moveLeft;
 	private Action moveRight;
 
+	private int numGoals = 0;
 
-    public GamePanel(Map<Position,Square> board, int rows, int cols, GameFrame gameFrame,GameController controller) {
+    public GamePanel(Map<Position,Square> board, int rows, int cols, GameFrame gameFrame, GameController gameController, GameMovementCounter gameMovementCounter, LevelMovementCounter levelMovementCounter) {
         this.board = board;
 		this.rows = rows;
 		this.cols = cols;
 		this.gameFrame = gameFrame;
-		this.controller = controller;
+		this.gameController = gameController;
         this.wall = loadImage("./sprites/wall.png");
 		this.box = loadImage("./sprites/box.png");
 		this.box_win = loadImage("./sprites/box_win.png");
 		this.goalPosition = loadImage("./sprites/goal-position.png");
 		this.floor = loadImage("./sprites/floor.png");
 		this.warehouseMan = loadImage("./sprites/warehouse-man.png");
+		this.gameMovementCounter = gameMovementCounter;
+		this.levelMovementCounter = levelMovementCounter;
 
 		setActions();
 		setKeys();
@@ -74,8 +76,11 @@ public class GamePanel extends JPanel {
 			}
 			return this.box;
 		} else if (o instanceof GoalPosition) {
+			numGoals++;
 			return this.goalPosition;
 		} else if (o instanceof WarehouseMan) {
+			if(((WarehouseMan) o).getGoalPosition() != null)
+				numGoals++;
 			return this.warehouseMan;
 		}
 		return null;
@@ -107,7 +112,9 @@ public class GamePanel extends JPanel {
 		this.moveUp = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.moveUp();
+				gameController.moveUp(levelMovementCounter.getMovementCount());
+				gameMovementCounter.incrementMovementCount();
+				levelMovementCounter.incrementMovementCount();
 				repaint();
 			}
 		};
@@ -115,7 +122,9 @@ public class GamePanel extends JPanel {
 		this.moveDown = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.moveDown();
+				gameController.moveDown(levelMovementCounter.getMovementCount());
+				gameMovementCounter.incrementMovementCount();
+				levelMovementCounter.incrementMovementCount();
 				repaint();
 			}
 		};
@@ -123,7 +132,9 @@ public class GamePanel extends JPanel {
 		this.moveLeft = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.moveLeft();
+				gameController.moveLeft(levelMovementCounter.getMovementCount());
+				gameMovementCounter.incrementMovementCount();
+				levelMovementCounter.incrementMovementCount();
 				repaint();
 			}
 		};
@@ -131,7 +142,9 @@ public class GamePanel extends JPanel {
 		this.moveRight = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.moveRight();
+				gameController.moveRight(levelMovementCounter.getMovementCount());
+				gameMovementCounter.incrementMovementCount();
+				levelMovementCounter.incrementMovementCount();
 				repaint();
 			}
 		};
@@ -139,13 +152,35 @@ public class GamePanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
+		numGoals=0;
 		int cellHeight = gameFrame.getHeight()/rows;
 		int cellWidth = gameFrame.getWidth()/cols;
 		super.paintComponent(g);
 		for (int i = 0; i < rows; ++i)
 			for (int j = 0; j < cols; ++j)
 				g.drawImage(floor, j * cellWidth, i * cellHeight, cellWidth, cellHeight,null);
+
 		board.forEach((pos, square) -> g.drawImage(classToImage(square), pos.getX() * cellWidth,
 				pos.getY() * cellHeight, cellWidth, cellHeight, null));
+
+		 if (numGoals == 0) {
+			this.levelMovementCounter.resetMovementCount();
+			if(gameController.nextLevel()){
+
+			}else{
+				ImageIcon backgroundImage = new ImageIcon("./sprites/end.jpg");
+				g.drawImage(backgroundImage.getImage(), 0, 0, gameFrame.getWidth(), gameFrame.getHeight(), null);
+				g.setColor(Color.BLACK);
+				g.setFont(new Font("Arial", Font.BOLD, 36));
+				FontMetrics fm = g.getFontMetrics();
+				String message = "Congratulations!";
+				int messageWidth = fm.stringWidth(message);
+				int messageHeight = fm.getHeight();
+				int x = (gameFrame.getWidth() - messageWidth) / 2;
+				int y = (gameFrame.getHeight() - messageHeight) / 2;
+				g.drawString(message, x, y);
+			}
+			repaint();
+		}
     }
 }

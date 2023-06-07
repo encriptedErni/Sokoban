@@ -9,7 +9,7 @@ public class Main {
 	public static void main(String[] args) {
         try {
             GameController game = new GameController();
-            game.parse("level1.txt");
+            game.parse(1);
             SwingUtilities.invokeLater(() -> new GameFrame(game));
         } catch (Exception e) {
             System.err.println("Something went wrong!" + e);
