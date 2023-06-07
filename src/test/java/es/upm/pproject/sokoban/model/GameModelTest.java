@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GameModelTest {
     private Map<Position, Square> board;
+
     @BeforeEach
     void initMap() {
         GameController gameController = new GameController();

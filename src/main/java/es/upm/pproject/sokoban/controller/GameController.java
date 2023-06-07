@@ -96,7 +96,6 @@ public class GameController {
             return this.board;
         } catch (IOException e) {
             System.err.println("IOException");
-          //  System.out.println("Game finished");
         }
         return new HashMap<>();
     }

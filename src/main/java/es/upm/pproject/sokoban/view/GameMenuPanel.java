@@ -24,7 +24,7 @@ public class GameMenuPanel extends JPanel {
         // Estilo de fuente y colores para los botones
         Font buttonFont = new Font("Arial", Font.BOLD, 70);
         Color buttonBackgroundColor = new Color(150, 150, 150);
-        Color buttonTextColor = Color.WHITE;
+        Color buttonTextColor = Color.BLACK;
 
         // Botón "Start"
         JButton startButton = new JButton("Start");
