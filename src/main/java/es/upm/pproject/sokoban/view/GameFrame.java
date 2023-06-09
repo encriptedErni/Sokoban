@@ -7,6 +7,7 @@ import es.upm.pproject.sokoban.model.GameMovementCounter;
 import es.upm.pproject.sokoban.model.LevelMovementCounter;
 
 import java.awt.*;
+import java.io.File;
 
 public class GameFrame extends JFrame {
     GamePanel boardPanel;
@@ -85,17 +86,19 @@ public class GameFrame extends JFrame {
         JMenuItem nextLevel = new JMenuItem("Next Level");
         nextLevel.addActionListener(e -> {
             this.levelMovementCounter.resetMovementCount();
-            if(gameController.nextLevel()) {
+            if (gameController.nextLevel())
                 boardPanel.repaint();
-            }
-            else{
-
-            }
         });
 
         JMenuItem saveGame = new JMenuItem("Save Game");
         saveGame.addActionListener(e -> {
-            gameController.saveGame();
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Choose a file to save your game");
+            int userSelection = fileChooser.showSaveDialog(null);
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileChooser.getSelectedFile();
+                gameController.saveGame(fileToSave, gameMovementCounter.getMovementCount());
+            }
         });
 
         JMenuItem openSavedGame = new JMenuItem("Open Saved Game");
