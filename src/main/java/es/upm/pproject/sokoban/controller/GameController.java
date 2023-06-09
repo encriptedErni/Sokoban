@@ -98,9 +98,8 @@ public class GameController {
             }
             return this.board;
         } catch (IOException e) {
-            System.exit(1);
+            return new HashMap<>();
         }
-        return new HashMap<>();
     }
 
     // Moving character through board

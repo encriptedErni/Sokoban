@@ -165,19 +165,21 @@ public class GamePanel extends JPanel {
 
 		 if (numGoals == 0) {
 			this.levelMovementCounter.resetMovementCount();
-			if(gameController.nextLevel()){
-
-			}else{
-				ImageIcon backgroundImage = new ImageIcon("./sprites/end.jpg");
+			if (!gameController.nextLevel()) {
+				getInputMap().clear();
+				getActionMap().clear();
+				ImageIcon backgroundImage = new ImageIcon("./sprites/final.png");
+				ImageIcon congratulations = new ImageIcon("./sprites/congratulations.png");
 				g.drawImage(backgroundImage.getImage(), 0, 0, gameFrame.getWidth(), gameFrame.getHeight(), null);
-				g.setColor(Color.BLACK);
+				g.drawImage(congratulations.getImage(), 0, 0, gameFrame.getWidth() / 2, gameFrame.getHeight() / 2, null);
+				g.setColor(Color.YELLOW);
 				g.setFont(new Font("Arial", Font.BOLD, 36));
 				FontMetrics fm = g.getFontMetrics();
-				String message = "Congratulations!";
+				String message = String.format("Score: %d", gameMovementCounter.getMovementCount());
 				int messageWidth = fm.stringWidth(message);
 				int messageHeight = fm.getHeight();
 				int x = (gameFrame.getWidth() - messageWidth) / 2;
-				int y = (gameFrame.getHeight() - messageHeight) / 2;
+				int y = (gameFrame.getHeight() / 2 - messageHeight) / 2;
 				g.drawString(message, x, y);
 			}
 			repaint();
