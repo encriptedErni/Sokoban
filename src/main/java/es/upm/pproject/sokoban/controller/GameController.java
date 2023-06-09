@@ -6,9 +6,7 @@ import es.upm.pproject.sokoban.model.GoalPosition;
 import es.upm.pproject.sokoban.model.Position;
 import es.upm.pproject.sokoban.model.Wall;
 import es.upm.pproject.sokoban.model.WarehouseMan;
-import es.upm.pproject.sokoban.view.GameFrame;
 
-import javax.swing.*;
 import java.io.*;
 import java.util.Map;
 import java.util.HashMap;
@@ -17,14 +15,12 @@ import java.util.Stack;
 public class GameController {
     private static final int MAX_LEVELS = 3;
     private final HashMap<Position, Square> board = new HashMap<>();
-    private Stack<Character> movements = new Stack<Character>();
+    private final Stack<Character> movements = new Stack<>();
     private int rows;
     private int cols;
+    private int actualLevel;
     private String levelName;
     private WarehouseMan warehouseMan;
-    private Box box;
-    private GoalPosition goalPosition;
-    private int actualLevel;
 
     public GameController() {
         this.actualLevel = 1;
@@ -75,8 +71,7 @@ public class GameController {
                             break;
                         case '*':
                             position = new Position(j, i);
-                            this.box = new Box(position, this.board);
-                            this.board.put(position, box);
+                            this.board.put(position, new Box(position, this.board));
                             break;
                         case 'W':
                             position = new Position(j, i);
@@ -85,8 +80,7 @@ public class GameController {
                             break;
                         case '#':
                             position = new Position(j, i);
-                            this.goalPosition = new GoalPosition(position, this.board);
-                            this.board.put(position, goalPosition);
+                            this.board.put(position, new GoalPosition(position, this.board));
                             break;
                         default:
                             break;
@@ -95,7 +89,7 @@ public class GameController {
             }
             return this.board;
         } catch (IOException e) {
-            System.err.println("IOException");
+            System.exit(1);
         }
         return new HashMap<>();
     }
@@ -123,12 +117,6 @@ public class GameController {
         if (this.warehouseMan.move('E', turn)) {
             movements.push('E');
         }
-    }
-
-
-    // implement later
-    public void pause() {
-        // TODO: the event handler of pausing the game. SPRINT-2
     }
 
     public void startNewGame() {
@@ -161,8 +149,26 @@ public class GameController {
         }
     }
 
-    public void saveGame() {
-        // TODO: Implement the logic of saving a game
+    public void saveGame(File saveFile, int gameMovementCounter) {
+        /*
+         * Format of the file
+         * 1- Number of level being played
+         * 2- The current game punctuation
+         * 3- All the movements made from the beginning
+         * */
+        try {
+            FileWriter fileWriter = new FileWriter(saveFile);
+            fileWriter.write(String.valueOf(actualLevel));
+            fileWriter.write('\n');
+            fileWriter.write(String.valueOf(gameMovementCounter));
+            fileWriter.write('\n');
+            for (Character movement : movements) {
+                fileWriter.write(movement);
+            }
+            fileWriter.close();
+        } catch (IOException e) {
+            System.exit(1);
+        }
     }
 
     public void openSavedGame() {
