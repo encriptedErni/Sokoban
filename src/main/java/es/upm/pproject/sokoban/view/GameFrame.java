@@ -8,6 +8,7 @@ import es.upm.pproject.sokoban.model.LevelMovementCounter;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 public class GameFrame extends JFrame {
     GamePanel boardPanel;
@@ -102,8 +103,28 @@ public class GameFrame extends JFrame {
         });
 
         JMenuItem openSavedGame = new JMenuItem("Open Saved Game");
-        saveGame.addActionListener(e -> {
-            gameController.openSavedGame();
+        openSavedGame.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Choose a file to load your game");
+            int userSelection = fileChooser.showSaveDialog(null);
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToLoad = fileChooser.getSelectedFile();
+                try {
+                    int game_punctuation = gameController.openSavedGame(fileToLoad);
+                    if (game_punctuation == -1){
+                        System.err.println("Error loading saved game");
+                        return;
+                    }
+
+                    gameController.parse(gameController.getActualLevel());
+                    this.gameMovementCounter.setMovementCount(game_punctuation);
+                    this.gameController.doMovements(0);
+                    this.levelMovementCounter.setMovementCount(gameController.getMovements().size());
+
+                } catch (FileNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
             boardPanel.repaint();
         });
 

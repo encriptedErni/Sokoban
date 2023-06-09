@@ -10,6 +10,7 @@ import es.upm.pproject.sokoban.model.WarehouseMan;
 import java.io.*;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.Stack;
 
 public class GameController {
@@ -40,6 +41,14 @@ public class GameController {
 
     public String getLevelName() {
         return levelName;
+    }
+
+    public int getActualLevel() {
+        return actualLevel;
+    }
+
+    public Stack<Character> getMovements() {
+        return movements;
     }
 
     public Map<Position, Square> parse(int levelNumber) {
@@ -132,9 +141,15 @@ public class GameController {
 
     public boolean undoMovement(int turn) {
         if (movements.empty()) return false;
-        Character movement = movements.pop();
+        Character movement = movements.firstElement();
         this.warehouseMan.unmove(movement, turn);
         return true;
+    }
+
+    public void doMovements(int turn) {
+        for (Character movement : movements) {
+            this.warehouseMan.move(movement, turn);
+        }
     }
 
     public boolean nextLevel() {
@@ -162,6 +177,9 @@ public class GameController {
             fileWriter.write('\n');
             fileWriter.write(String.valueOf(gameMovementCounter));
             fileWriter.write('\n');
+            if(movements.isEmpty()){
+                fileWriter.write('-');
+            }
             for (Character movement : movements) {
                 fileWriter.write(movement);
             }
@@ -171,8 +189,36 @@ public class GameController {
         }
     }
 
-    public void openSavedGame() {
+    public int openSavedGame(File savedGame) throws FileNotFoundException {
         // TODO: Implement the logic of opening a saved game
+        int game_punctuation;
+        movements.clear();
+        try (Scanner scanner = new Scanner(savedGame)) {
+            // Read the first line which contains the number of level being played
+            if (scanner.hasNextInt()) {
+                actualLevel = scanner.nextInt();
+            }
+            else {return -1;}
+
+            // Read the second line which contains the current game punctuation
+            if (scanner.hasNextInt()) {
+                game_punctuation = scanner.nextInt();
+            }
+            else{return -1;}
+
+            // Read the third line which contains all the movements made from the beginning
+            if (scanner.hasNext()) {
+                String movementsStr = scanner.next();
+                if(!movementsStr.equals("-")) {
+                    for (char c : movementsStr.toCharArray()) {
+                        movements.push(c);
+                    }
+                }
+            }
+            else{return -1;}
+        }
+        this.board.clear();
+        return game_punctuation;
     }
 
     public void exitGame() {

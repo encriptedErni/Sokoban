@@ -14,6 +14,11 @@ public class GameMovementCounter extends JLabel {
         return this.movements;
     }
 
+    public void setMovementCount(int movements){
+        this.movements = movements;
+        setText("Game Score: " + this.movements);
+    }
+
     public void resetMovementCount() {
         this.movements = 0;
         setText("Game Score: " + this.movements);
