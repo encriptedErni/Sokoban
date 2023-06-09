@@ -14,6 +14,11 @@ public class LevelMovementCounter extends JLabel {
         return this.movements;
     }
 
+    public void setMovementCount(int movements){
+        this.movements = movements;
+        setText("Level Score: " + this.movements);
+    }
+
     public void resetMovementCount() {
         this.movements = 0;
         setText("Level Score: " + this.movements);
