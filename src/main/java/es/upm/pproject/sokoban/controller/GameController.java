@@ -13,7 +13,12 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Stack;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class GameController {
+
+    private static final Logger logger = LoggerFactory.getLogger(GameController.class);
     private static final int MAX_LEVELS = 3;
     private final HashMap<Position, Square> board = new HashMap<>();
     private final Stack<Character> movements = new Stack<>();
@@ -52,6 +57,7 @@ public class GameController {
     }
 
     public Map<Position, Square> parse(int levelNumber) {
+        logger.info("Parsing level...");
         int nBoxes = 0;
         int nGoalPositions = 0;
         int nWarehouseMan = 0;
@@ -137,17 +143,20 @@ public class GameController {
     }
 
     public void startNewGame() {
+        logger.info("Starting game...");
         this.board.clear();
         this.actualLevel = 1;
         parse(this.actualLevel);
     }
 
     public void restartGame() {
+        logger.info("Restart game...");
         this.board.clear();
         parse(this.actualLevel);
     }
 
     public boolean undoMovement(int turn) {
+        logger.info("Undo movement...");
         if (movements.empty()) return false;
         Character movement = movements.pop();
         this.warehouseMan.unmove(movement, turn);
@@ -161,6 +170,7 @@ public class GameController {
     }
 
     public boolean nextLevel() {
+        logger.info("Next Level...");
         this.board.clear();
         movements.clear();
         if (this.actualLevel == MAX_LEVELS) {
@@ -173,6 +183,7 @@ public class GameController {
     }
 
     public void saveGame(File saveFile, int gameMovementCounter) {
+        logger.info("Saving game...");
         /*
          * Format of the file
          * 1- Number of level being played
@@ -198,6 +209,7 @@ public class GameController {
     }
 
     public int openSavedGame(File savedGame) throws FileNotFoundException {
+        logger.info("Opening saved game...");
         // TODO: Implement the logic of opening a saved game
         int game_punctuation;
         movements.clear();

@@ -16,7 +16,13 @@ import es.upm.pproject.sokoban.model.Box;
 
 import javax.imageio.ImageIO;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class GamePanel extends JPanel {
+
+	private static final Logger logger = LoggerFactory.getLogger(GameController.class);
 	private GameMovementCounter gameMovementCounter;
 	private LevelMovementCounter levelMovementCounter;
 	private final int rows;
@@ -37,13 +43,15 @@ public class GamePanel extends JPanel {
 
 	private int numGoals = 0;
 
-    public GamePanel(Map<Position,Square> board, int rows, int cols, GameFrame gameFrame, GameController gameController, GameMovementCounter gameMovementCounter, LevelMovementCounter levelMovementCounter) {
-        this.board = board;
+	private boolean finished = false;
+
+	public GamePanel(Map<Position,Square> board, int rows, int cols, GameFrame gameFrame, GameController gameController, GameMovementCounter gameMovementCounter, LevelMovementCounter levelMovementCounter) {
+		this.board = board;
 		this.rows = rows;
 		this.cols = cols;
 		this.gameFrame = gameFrame;
 		this.gameController = gameController;
-        this.wall = loadImage("./sprites/wall.png");
+		this.wall = loadImage("./sprites/wall.png");
 		this.box = loadImage("./sprites/box.png");
 		this.box_win = loadImage("./sprites/box_win.png");
 		this.goalPosition = loadImage("./sprites/goal-position.png");
@@ -54,20 +62,20 @@ public class GamePanel extends JPanel {
 
 		setActions();
 		setKeys();
-    }
+	}
 
-    private Image loadImage(String imagePath) {
+	private Image loadImage(String imagePath) {
 		Image img = null;
-        try {
-            File imageFile = new File(imagePath);
-            img = ImageIO.read(imageFile);
-        } catch (IOException e) {
-            System.err.println("Failed to load the image: " + e.getMessage());
-        }
+		try {
+			File imageFile = new File(imagePath);
+			img = ImageIO.read(imageFile);
+		} catch (IOException e) {
+			System.err.println("Failed to load the image: " + e.getMessage());
+		}
 		return img;
 	}
 
-    private Image classToImage(Object o) {
+	private Image classToImage(Object o) {
 		if (o instanceof Wall) {
 			return this.wall;
 		} else if (o instanceof Box) {
@@ -150,8 +158,8 @@ public class GamePanel extends JPanel {
 		};
 	}
 
-    @Override
-    protected void paintComponent(Graphics g) {
+	@Override
+	protected void paintComponent(Graphics g) {
 		numGoals=0;
 		int cellHeight = gameFrame.getHeight()/rows;
 		int cellWidth = gameFrame.getWidth()/cols;
@@ -163,9 +171,10 @@ public class GamePanel extends JPanel {
 		board.forEach((pos, square) -> g.drawImage(classToImage(square), pos.getX() * cellWidth,
 				pos.getY() * cellHeight, cellWidth, cellHeight, null));
 
-		 if (numGoals == 0) {
+		if (numGoals == 0 && !finished) {
 			this.levelMovementCounter.resetMovementCount();
-			if (!gameController.nextLevel()) {
+			if (!gameController.nextLevel() && !finished){
+				finished = true;
 				getInputMap().clear();
 				getActionMap().clear();
 				ImageIcon backgroundImage = new ImageIcon("./sprites/final.png");
@@ -181,8 +190,11 @@ public class GamePanel extends JPanel {
 				int x = (gameFrame.getWidth() - messageWidth) / 2;
 				int y = (gameFrame.getHeight() / 2 - messageHeight) / 2;
 				g.drawString(message, x, y);
+				logger.info("Game finished.");
 			}
-			repaint();
+			else{
+				repaint();
+			}
 		}
-    }
+	}
 }
