@@ -118,28 +118,36 @@ public class GameController {
     }
 
     // Moving character through board
-    public void moveUp(int turn) {
+    public boolean moveUp(int turn) {
         if (this.warehouseMan.move('N', turn)) {
             movements.push('N');
+            return true;
         }
+        return false;
     }
 
-    public void moveDown(int turn) {
+    public boolean moveDown(int turn) {
         if (this.warehouseMan.move('S', turn)) {
             movements.push('S');
+            return true;
         }
+        return false;
     }
 
-    public void moveLeft(int turn) {
+    public boolean moveLeft(int turn) {
         if (this.warehouseMan.move('W', turn)) {
             movements.push('W');
+            return true;
         }
+        return false;
     }
 
-    public void moveRight(int turn) {
+    public boolean moveRight(int turn) {
         if (this.warehouseMan.move('E', turn)) {
             movements.push('E');
+            return true;
         }
+        return false;
     }
 
     public void startNewGame() {
