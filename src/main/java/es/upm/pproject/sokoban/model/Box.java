@@ -1,6 +1,5 @@
 package es.upm.pproject.sokoban.model;
 
-import java.io.Serializable;
 import java.security.InvalidParameterException;
 import java.util.Map;
 import java.util.Stack;

@@ -222,8 +222,7 @@ public class GameController {
 
     public int openSavedGame(File savedGame) throws FileNotFoundException {
         logger.info("Opening saved game...");
-        // TODO: Implement the logic of opening a saved game
-        int game_punctuation;
+        int gamePunctuation;
         movements.clear();
         try (Scanner scanner = new Scanner(savedGame)) {
             // Read the first line which contains the number of level being played
@@ -234,7 +233,7 @@ public class GameController {
 
             // Read the second line which contains the current game punctuation
             if (scanner.hasNextInt()) {
-                game_punctuation = scanner.nextInt();
+                gamePunctuation = scanner.nextInt();
             }
             else{return -1;}
 
@@ -250,7 +249,7 @@ public class GameController {
             else{return -1;}
         }
         this.board.clear();
-        return game_punctuation;
+        return gamePunctuation;
     }
 
     public void exitGame() {
