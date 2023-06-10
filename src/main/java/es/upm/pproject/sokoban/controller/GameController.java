@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 public class GameController {
 
     private static final Logger logger = LoggerFactory.getLogger(GameController.class);
-    private static final int MAX_LEVELS = 2;
+    private static final int MAX_LEVELS = 3;
     private final HashMap<Position, Square> board = new HashMap<>();
     private final Stack<Character> movements = new Stack<>();
     private int rows;
