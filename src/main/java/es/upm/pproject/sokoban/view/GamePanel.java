@@ -70,7 +70,7 @@ public class GamePanel extends JPanel {
             File imageFile = new File(imagePath);
             img = ImageIO.read(imageFile);
         } catch (IOException e) {
-            System.err.println("Failed to load the image: " + e.getMessage());
+            logger.error("Failed to load the image: " + e.getMessage());
         }
         return img;
     }
