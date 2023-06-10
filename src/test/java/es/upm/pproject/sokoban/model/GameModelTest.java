@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
+import java.util.Stack;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,21 +15,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class GameModelTest {
     private Map<Position, Square> board;
 
+    private GameController gameController;
+
     @BeforeEach
     void initMap() {
-        GameController gameController = new GameController();
+        gameController = new GameController();
         board = gameController.parse(2);
-
     }
     @Nested
     class WarehouseManMoves {
         private WarehouseMan warehouseMan;
         private Wall wall;
-
+        private GoalPosition goalPosition;
         @BeforeEach
         void initWarehouseManAndWall() {
             warehouseMan = (WarehouseMan) board.get(new Position(2, 4));
             wall = (Wall) board.get(new Position(1, 4));
+            goalPosition =  (GoalPosition) board.get(new Position(5,2));
         }
 
         @Test
@@ -40,7 +43,6 @@ class GameModelTest {
             Position NewPosition = warehouseManMoved.getPosition();
             assertEquals(PreviousPosition.getX(), NewPosition.getX());
             assertNotEquals(PreviousPosition.getY(), NewPosition.getY());
-
         }
 
         @Test
@@ -59,7 +61,16 @@ class GameModelTest {
             assertEquals(PreviousPositionWall.getX(), NewPositionWall.getX());
             assertEquals(PreviousPositionWall.getY(), NewPositionWall.getY());
         }
-
+        @Test
+        void WarehouseManToGoalPosition(){
+            Position PreviousPositionWarehouseMan = warehouseMan.getPosition();
+            Position PreviousPositionGoal = goalPosition.getPosition();
+            assertTrue(warehouseMan.move('N',0));
+            assertTrue(warehouseMan.move('E',1));
+            assertTrue(warehouseMan.move('E',2));
+            assertTrue(warehouseMan.move('E',3));
+            assertTrue(warehouseMan.move('S',4));
+        }
     }
     @Nested
     class BoxTests {
@@ -123,8 +134,10 @@ class GameModelTest {
             assertNotNull(upBox.getGoalPosition());
         }
     }
+
+
     @Nested
-    class movementCounterTest{
+    class gameMovementCounterTest{
         private GameMovementCounter gameMovementCounter;
 
         @BeforeEach
@@ -216,4 +229,27 @@ class GameModelTest {
             assertEquals(10, levelMovementCounter.getMovementCount());
         }
     }
+
+    @Nested
+    class moveAndTurnTest{
+        private WarehouseMan warehouseMan;
+        private Box boxUp;
+
+        private Stack<MoveAndTurn> boxMovements;
+
+        @BeforeEach
+        void initWarehouseManAndWall() {
+            warehouseMan = (WarehouseMan) board.get(new Position(2, 4));
+            boxUp = (Box) board.get(new Position(2,3));
+            boxMovements = boxUp.getMovements();
+        }
+        @Test
+        void moveAndTurnGetters(){
+            gameController.moveUp(0);
+            assertEquals(boxMovements.peek().getMovement(), 'N');
+            assertEquals(boxMovements.peek().getTurn(), 0);
+            assertEquals(boxMovements.peek(), new MoveAndTurn('N', 0));
+        }
+    }
+
 }
