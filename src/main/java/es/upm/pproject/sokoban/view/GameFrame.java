@@ -52,15 +52,17 @@ public class GameFrame extends JFrame {
             this.levelMovementCounter.resetMovementCount();
             this.gameMovementCounter.resetMovementCount();
             gameController.startNewGame();
+            boardPanel.startNewGame();
             boardPanel.repaint();
         });
 
-        JMenuItem restart = new JMenuItem("Restart");
+        JMenuItem restart = new JMenuItem("Restart level");
         restart.addActionListener(e -> {
-            this.levelMovementCounter.resetMovementCount();
-            this.gameMovementCounter.resetMovementCount();
-            gameController.restartGame();
-            boardPanel.repaint();
+            if (gameController.restartLevel(boardPanel.getFinished())) {
+                this.levelMovementCounter.resetMovementCount();
+                this.gameMovementCounter.resetMovementCount();
+                boardPanel.repaint();
+            }
         });
 
         JMenuItem undoMovement = new JMenuItem("Undo");
@@ -70,13 +72,6 @@ public class GameFrame extends JFrame {
                 this.gameMovementCounter.decrementMovementCount();
                 boardPanel.repaint();
             }
-        });
-
-        JMenuItem nextLevel = new JMenuItem("Next Level");
-        nextLevel.addActionListener(e -> {
-            this.levelMovementCounter.resetMovementCount();
-            if (gameController.nextLevel())
-                boardPanel.repaint();
         });
 
         JMenuItem saveGame = new JMenuItem("Save Game");
@@ -123,7 +118,6 @@ public class GameFrame extends JFrame {
 
         menu.add(startNewGame);
         menu.add(restart);
-        menu.add(nextLevel);
         menu.add(undoMovement);
         menu.add(saveGame);
         menu.add(openSavedGame);

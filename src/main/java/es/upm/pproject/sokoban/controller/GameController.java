@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 public class GameController {
 
     private static final Logger logger = LoggerFactory.getLogger(GameController.class);
-    private static final int MAX_LEVELS = 3;
+    private static final int MAX_LEVELS = 2;
     private final HashMap<Position, Square> board = new HashMap<>();
     private final Stack<Character> movements = new Stack<>();
     private int rows;
@@ -157,14 +157,18 @@ public class GameController {
         parse(this.actualLevel);
     }
 
-    public void restartGame() {
-        logger.info("Restart game...");
-        this.board.clear();
-        parse(this.actualLevel);
+    public boolean restartLevel(boolean finished) {
+        if (!finished) {
+            logger.info("Restarting level...");
+            this.board.clear();
+            parse(this.actualLevel);
+            return true;
+        }
+        return false;
     }
 
     public boolean undoMovement(int turn) {
-        logger.info("Undo movement...");
+        logger.info("Undoing movement...");
         if (movements.empty()) return false;
         Character movement = movements.pop();
         this.warehouseMan.unmove(movement, turn);
