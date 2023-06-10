@@ -38,8 +38,12 @@ public class WarehouseMan implements Square, Unmove {
             }
             square = this.board.get(newPosition);
             if (square instanceof GoalPosition) {
+                if (goalPosition != null) {
+                    board.put(position, goalPosition);
+                } else {
+                    board.remove(position);
+                }
                 goalPosition = (GoalPosition) square;
-                board.remove(position);
                 this.position = newPosition;
                 board.put(position, this);
                 return true;

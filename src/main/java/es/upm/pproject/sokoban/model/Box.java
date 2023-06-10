@@ -38,8 +38,12 @@ public class Box implements Square, Unmove {
         if (newPosition == null) return false;
         if ((square = this.board.get(newPosition)) != null) {
             if (square instanceof GoalPosition) {
+                if (goalPosition != null) {
+                    board.put(position, goalPosition);
+                } else {
+                    board.remove(position);
+                }
                 goalPosition = (GoalPosition) square;
-                board.remove(position);
                 this.position = newPosition;
                 board.put(position, this);
                 return true;
