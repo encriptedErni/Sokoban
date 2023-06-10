@@ -70,6 +70,14 @@ class GameModelTest {
             assertTrue(warehouseMan.move('E',2));
             assertTrue(warehouseMan.move('E',3));
             assertTrue(warehouseMan.move('S',4));
+            assertTrue(warehouseMan.move('N',5));
+        }
+        @Test
+        void WarehouseManUnMove(){
+            Position PreviousPositionWarehouseMan = warehouseMan.getPosition();
+            gameController.moveUp(0);
+            gameController.undoMovement(0);
+            assertEquals(PreviousPositionWarehouseMan, warehouseMan.getPosition());
         }
     }
     @Nested
@@ -133,8 +141,33 @@ class GameModelTest {
             assertTrue(warehouseMan.move('E',5));
             assertNotNull(upBox.getGoalPosition());
         }
-    }
 
+        @Test
+        void BoxMovesInAllDirection() {
+            assertTrue(warehouseMan.move('N',0));
+            assertTrue(warehouseMan.move('W',1));
+            assertTrue(warehouseMan.move('N',2));
+            assertTrue(warehouseMan.move('E',3));
+            assertTrue(warehouseMan.move('N',4));
+            assertTrue(warehouseMan.move('E',5));
+            assertTrue(warehouseMan.move('E',6));
+            assertTrue(warehouseMan.move('S',7));
+            assertTrue(warehouseMan.move('W',8));
+            assertTrue(warehouseMan.move('N',9));
+            assertTrue(warehouseMan.move('W',10));
+            assertTrue(warehouseMan.move('S',11));
+        }
+        @Test
+        void BoxUnMove(){
+            Position PreviousPositionUpBox = upBox.getPosition();
+            Position PreviousPositionWarehouseMan = warehouseMan.getPosition();
+            gameController.moveUp(0);
+            gameController.undoMovement(0);
+            assertEquals(PreviousPositionUpBox, upBox.getPosition());
+            assertEquals(PreviousPositionWarehouseMan, warehouseMan.getPosition());
+        }
+
+    }
 
     @Nested
     class gameMovementCounterTest{
