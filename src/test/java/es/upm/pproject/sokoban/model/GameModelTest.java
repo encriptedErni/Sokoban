@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.security.InvalidParameterException;
 import java.util.Map;
 import java.util.Stack;
 
@@ -78,6 +79,12 @@ class GameModelTest {
             gameController.moveUp(0);
             gameController.undoMovement(0);
             assertEquals(PreviousPositionWarehouseMan, warehouseMan.getPosition());
+        }
+        @Test
+        void nullAndInvalidPositionCheck(){
+            assertThrows(InvalidParameterException.class, () ->{
+               warehouseMan.move('j',3);
+            });
         }
     }
     @Nested
@@ -158,13 +165,31 @@ class GameModelTest {
             assertTrue(warehouseMan.move('S',11));
         }
         @Test
-        void BoxUnMove(){
-            Position PreviousPositionUpBox = upBox.getPosition();
-            Position PreviousPositionWarehouseMan = warehouseMan.getPosition();
+        void BoxUnMovesInAllDirection() {
             gameController.moveUp(0);
-            gameController.undoMovement(0);
-            assertEquals(PreviousPositionUpBox, upBox.getPosition());
-            assertEquals(PreviousPositionWarehouseMan, warehouseMan.getPosition());
+            gameController.moveLeft(1);
+            gameController.moveUp(2);
+            gameController.moveRight(3);
+            gameController.moveUp(4);
+            gameController.moveRight(5);
+            gameController.moveRight(6);
+            gameController.moveDown(7);
+            gameController.moveLeft(8);
+            gameController.moveUp(9);
+            gameController.moveLeft(10);
+            gameController.moveDown(11);
+            assertTrue(gameController.undoMovement(11));
+            assertTrue(gameController.undoMovement(10));
+            assertTrue(gameController.undoMovement(9));
+            assertTrue(gameController.undoMovement(8));
+            assertTrue(gameController.undoMovement(7));
+            assertTrue(gameController.undoMovement(6));
+            assertTrue(gameController.undoMovement(5));
+            assertTrue(gameController.undoMovement(4));
+            assertTrue(gameController.undoMovement(3));
+            assertTrue(gameController.undoMovement(2));
+            assertTrue(gameController.undoMovement(1));
+            assertTrue(gameController.undoMovement(0));
         }
 
     }

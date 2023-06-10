@@ -6,8 +6,9 @@ import java.util.Map;
 import java.util.Stack;
 
 import es.upm.pproject.sokoban.interfaces.Square;
+import es.upm.pproject.sokoban.interfaces.Unmove;
 
-public class Box implements Square {
+public class Box implements Square, Unmove {
 
     private Position position;
     private Stack<MoveAndTurn> movements;

@@ -1,11 +1,12 @@
 package es.upm.pproject.sokoban.model;
 
 import es.upm.pproject.sokoban.interfaces.Square;
+import es.upm.pproject.sokoban.interfaces.Unmove;
 
 import java.security.InvalidParameterException;
 import java.util.Map;
 
-public class WarehouseMan implements Square {
+public class WarehouseMan implements Square, Unmove {
     private Position position;
     private final Map<Position, Square> board;
     private GoalPosition goalPosition = null;
@@ -105,8 +106,9 @@ public class WarehouseMan implements Square {
         }
         this.position = oldPosition;
         board.put(position, this);
-        if ((square = this.board.get(nextPosition)) != null) {
-            square.unmove(way, turn);
+        square = this.board.get(nextPosition);
+        if (square instanceof Box) {
+            ((Box) square).unmove(way, turn);
         }
     }
 

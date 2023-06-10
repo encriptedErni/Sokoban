@@ -15,9 +15,7 @@ public class Wall implements Square {
 		 return false;
 	 }
 
-	public void unmove(char way, int turn) {
 
-	}
 
 	public Position getPosition() {
 		return position;
