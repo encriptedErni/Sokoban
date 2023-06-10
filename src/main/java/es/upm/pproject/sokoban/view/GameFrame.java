@@ -16,7 +16,7 @@ public class GameFrame extends JFrame {
     GameController gameController;
     GameMovementCounter gameMovementCounter;
     LevelMovementCounter levelMovementCounter;
-
+    Dimension dimension;
     public GameFrame(GameController gameController) {
         this.gameController = gameController;
         this.gameMovementCounter = new GameMovementCounter();
@@ -24,22 +24,22 @@ public class GameFrame extends JFrame {
 
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new CardLayout());
-
+        this.dimension = new Dimension();
+        dimension.setSize(50 * gameController.getCols(), 56 * gameController.getRows());
         this.menuPanel = new GameMenuPanel(contentPane);
-        this.boardPanel = new GamePanel(gameController.getBoard(), gameController.getRows(), gameController.getCols(),
-                this, gameController, gameMovementCounter, levelMovementCounter);
+        this.boardPanel = new GamePanel(gameController, dimension, gameMovementCounter, levelMovementCounter);
 
         contentPane.add(menuPanel);
         contentPane.add(boardPanel);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Sokoban - " + gameController.getLevelName());
+        setTitle("Sokoban");
         setContentPane(contentPane);
         setJMenuBar(newMenuBar());
         setLocationRelativeTo(null);
+        setPreferredSize(dimension);
+        setResizable(false);
         pack();
-        // Set size da BUG en sonarQube
-        // setSize(100 * gameController.getCols(), 100 * gameController.getRows());
         setVisible(true);
     }
 
@@ -67,7 +67,7 @@ public class GameFrame extends JFrame {
 
         JMenuItem undoMovement = new JMenuItem("Undo");
         undoMovement.addActionListener(e -> {
-            if (gameController.undoMovement(levelMovementCounter.getMovementCount()-1)) {
+            if (gameController.undoMovement(levelMovementCounter.getMovementCount() - 1)) {
                 this.levelMovementCounter.decrementMovementCount();
                 this.gameMovementCounter.decrementMovementCount();
                 boardPanel.repaint();
@@ -94,7 +94,7 @@ public class GameFrame extends JFrame {
                 File fileToLoad = fileChooser.getSelectedFile();
                 try {
                     int game_punctuation = gameController.openSavedGame(fileToLoad);
-                    if (game_punctuation == -1){
+                    if (game_punctuation == -1) {
                         System.err.println("Error loading saved game");
                         return;
                     }
