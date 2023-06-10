@@ -25,7 +25,7 @@ public class GameFrame extends JFrame {
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new CardLayout());
 
-        this.menuPanel = new GameMenuPanel(contentPane, gameController);
+        this.menuPanel = new GameMenuPanel(contentPane);
         this.boardPanel = new GamePanel(gameController.getBoard(), gameController.getRows(), gameController.getCols(),
                 this, gameController, gameMovementCounter, levelMovementCounter);
 
@@ -116,7 +116,7 @@ public class GameFrame extends JFrame {
                         return;
                     }
 
-                    gameController.parse(gameController.getActualLevel());
+                    this.gameController.parse(gameController.getActualLevel());
                     this.gameMovementCounter.setMovementCount(game_punctuation);
                     this.gameController.doMovements(0);
                     this.levelMovementCounter.setMovementCount(gameController.getMovements().size());

@@ -7,30 +7,28 @@ import java.awt.*;
 import javax.swing.border.EmptyBorder;
 
 public class GameMenuPanel extends JPanel {
-    private GameController gameController;
 
-    public GameMenuPanel(JPanel contentPane, GameController gameController) {
-        this.gameController = gameController;
+    public GameMenuPanel(JPanel contentPane) {
 
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(20, 20, 20, 20)); // Agrega un espacio interno alrededor del panel
-        setBackground(new Color(50, 50, 50)); // Establece el color de fondo del panel
+        setBackground(new Color(31, 31, 31)); // Establece el color de fondo marrón
 
-        // Panel para contener los botones
+        // Panel with the buttons
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(2, 1, 10, 10)); // Utiliza un GridLayout para organizar los botones
         buttonPanel.setOpaque(false);
 
-        // Estilo de fuente y colores para los botones
+        // Font of the buttons
         Font buttonFont = new Font("Arial", Font.BOLD, 70);
-        Color buttonBackgroundColor = new Color(150, 150, 150);
+        Color buttonBackgroundColor = new Color(182, 172, 132); // Amarillo
         Color buttonTextColor = Color.BLACK;
 
-        // Botón "Start"
+        // button "Start"
         JButton startButton = new JButton("Start");
         startButton.setFont(buttonFont);
         startButton.setBackground(buttonBackgroundColor);
-        startButton.setFocusPainted(false); // quita un recuadro azul raro que salia
+        startButton.setFocusPainted(false); // Quita el recuadro azul alrededor del botón
         startButton.setForeground(buttonTextColor);
         startButton.addActionListener(e -> {
             CardLayout cardLayout = (CardLayout) contentPane.getLayout();
@@ -38,7 +36,7 @@ public class GameMenuPanel extends JPanel {
         });
         buttonPanel.add(startButton);
 
-        // Botón "Exit"
+        // button "Exit"
         JButton exitButton = new JButton("Exit");
         exitButton.setFont(buttonFont);
         exitButton.setBackground(buttonBackgroundColor);
@@ -46,7 +44,6 @@ public class GameMenuPanel extends JPanel {
         exitButton.addActionListener(e -> System.exit(0));
         buttonPanel.add(exitButton);
 
-        // Agrega el panel de botones al centro del GameMenuPanel
         add(buttonPanel, BorderLayout.CENTER);
     }
 }

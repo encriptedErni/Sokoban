@@ -140,7 +140,7 @@ public class GameController {
 
     public boolean undoMovement(int turn) {
         if (movements.empty()) return false;
-        Character movement = movements.firstElement();
+        Character movement = movements.pop();
         this.warehouseMan.unmove(movement, turn);
         return true;
     }
