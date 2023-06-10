@@ -23,33 +23,34 @@ import org.slf4j.LoggerFactory;
 public class GamePanel extends JPanel {
 
     private static final Logger logger = LoggerFactory.getLogger(GamePanel.class);
-    private GameMovementCounter gameMovementCounter;
-    private LevelMovementCounter levelMovementCounter;
+    private final GameMovementCounter gameMovementCounter;
+    private final LevelMovementCounter levelMovementCounter;
     private final int rows;
     private final int cols;
-    private Map<Position, Square> board;
+    private final int frameHeight;
+    private final int frameWidth;
+    private final Map<Position, Square> board;
     private final Image wall;
     private final Image box;
     private final Image box_win;
     private final Image goalPosition;
     private final Image warehouseMan;
     private final Image floor;
-    private final GameFrame gameFrame;
     private final GameController gameController;
     private Action moveUp;
     private Action moveDown;
     private Action moveLeft;
     private Action moveRight;
-
     private int numGoals = 0;
-
     private boolean finished = false;
 
-    public GamePanel(Map<Position, Square> board, int rows, int cols, GameFrame gameFrame, GameController gameController, GameMovementCounter gameMovementCounter, LevelMovementCounter levelMovementCounter) {
+    public GamePanel(Map<Position, Square> board, int rows, int cols, int frameWidth, int frameHeight, GameController gameController,
+                     GameMovementCounter gameMovementCounter, LevelMovementCounter levelMovementCounter) {
         this.board = board;
         this.rows = rows;
         this.cols = cols;
-        this.gameFrame = gameFrame;
+        this.frameHeight = frameHeight;
+        this.frameWidth = frameWidth;
         this.gameController = gameController;
         this.wall = loadImage("./sprites/wall.png");
         this.box = loadImage("./sprites/box.png");
@@ -171,39 +172,38 @@ public class GamePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         numGoals = 0;
-        int cellHeight = gameFrame.getHeight() / rows;
-        int cellWidth = gameFrame.getWidth() / cols;
+        Container frame = SwingUtilities.getWindowAncestor(this);
         super.paintComponent(g);
         for (int i = 0; i < rows; ++i)
             for (int j = 0; j < cols; ++j)
-                g.drawImage(floor, j * cellWidth, i * cellHeight, cellWidth, cellHeight, null);
+                g.drawImage(floor, j * 50, i * 50, 50, 50, null);
 
-        board.forEach((pos, square) -> g.drawImage(classToImage(square), pos.getX() * cellWidth,
-                pos.getY() * cellHeight, cellWidth, cellHeight, null));
+        board.forEach((pos, square) -> g.drawImage(classToImage(square), pos.getX() * 50,
+                pos.getY() * 50, 50, 50, null));
 
         if (numGoals == 0 && !finished) {
             this.levelMovementCounter.resetMovementCount();
             if (!gameController.nextLevel() && !finished) {
-                gameFrame.setTitle("Sokoban - Congratulations!");
+                ((GameFrame) frame).setTitle("Sokoban - Congratulations!");
                 finished = true;
                 getInputMap().clear();
                 getActionMap().clear();
                 ImageIcon backgroundImage = new ImageIcon("./sprites/final.png");
                 ImageIcon congratulations = new ImageIcon("./sprites/congratulations.png");
-                g.drawImage(backgroundImage.getImage(), 0, 0, gameFrame.getWidth(), gameFrame.getHeight(), null);
-                g.drawImage(congratulations.getImage(), 0, 0, gameFrame.getWidth() / 2, gameFrame.getHeight() / 2, null);
+                g.drawImage(backgroundImage.getImage(), 0, 0, frameWidth, frameHeight, null);
+                g.drawImage(congratulations.getImage(), 0, 0, frameWidth / 2, frameHeight / 2, null);
                 g.setColor(Color.YELLOW);
                 g.setFont(new Font("Arial", Font.BOLD, 36));
                 FontMetrics fm = g.getFontMetrics();
                 String message = String.format("Score: %d", gameMovementCounter.getMovementCount());
                 int messageWidth = fm.stringWidth(message);
                 int messageHeight = fm.getHeight();
-                int x = (gameFrame.getWidth() - messageWidth) / 2;
-                int y = (gameFrame.getHeight() / 2 - messageHeight) / 2;
+                int x = (frameWidth - messageWidth) / 2;
+                int y = (frameHeight / 2 - messageHeight) / 2;
                 g.drawString(message, x, y);
                 logger.info("Game finished.");
             } else {
-                gameFrame.setTitle("Sokoban - " + gameController.getLevelName());
+                ((GameFrame) frame).setTitle("Sokoban - " + gameController.getLevelName());
                 repaint();
             }
         }
