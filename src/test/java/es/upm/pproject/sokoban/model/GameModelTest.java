@@ -17,7 +17,7 @@ class GameModelTest {
     @BeforeEach
     void initMap() {
         GameController gameController = new GameController();
-        board = gameController.parse(1);
+        board = gameController.parse(2);
 
     }
     @Nested
