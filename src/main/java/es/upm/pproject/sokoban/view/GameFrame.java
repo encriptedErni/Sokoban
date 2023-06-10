@@ -25,12 +25,9 @@ public class GameFrame extends JFrame {
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new CardLayout());
 
-        int frameHeight = 56 * gameController.getRows();
-        int frameWidth = 50 * gameController.getCols();
-
         this.menuPanel = new GameMenuPanel(contentPane);
         this.boardPanel = new GamePanel(gameController.getBoard(), gameController.getRows(), gameController.getCols(),
-                frameWidth, frameHeight, gameController, gameMovementCounter, levelMovementCounter);
+                this, gameController, gameMovementCounter, levelMovementCounter);
 
         contentPane.add(menuPanel);
         contentPane.add(boardPanel);
@@ -40,8 +37,9 @@ public class GameFrame extends JFrame {
         setContentPane(contentPane);
         setJMenuBar(newMenuBar());
         setLocationRelativeTo(null);
-        setResizable(false);
-        setSize(frameWidth, frameHeight);
+        pack();
+        // Set size da BUG en sonarQube
+        // setSize(100 * gameController.getCols(), 100 * gameController.getRows());
         setVisible(true);
     }
 
@@ -114,9 +112,9 @@ public class GameFrame extends JFrame {
         });
 
         JMenuItem exit = new JMenuItem("Exit");
-        exit.addActionListener(e ->
-            gameController.exitGame()
-        );
+        exit.addActionListener(e -> {
+            gameController.exitGame();
+        });
 
         menu.add(startNewGame);
         menu.add(restart);
