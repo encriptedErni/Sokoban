@@ -27,6 +27,6 @@ public class MoveAndTurn
         }
         MoveAndTurn p = (MoveAndTurn) o;
 
-        return p.getMovement()== this.movement && p.getTurn() == this.turn;
+        return p.getMovement().equals(this.movement) && p.getTurn() == this.turn;
     }
 }

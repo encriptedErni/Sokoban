@@ -22,18 +22,18 @@ import org.slf4j.LoggerFactory;
 
 public class GamePanel extends JPanel {
 
-	private static final Logger logger = LoggerFactory.getLogger(GameController.class);
+	private static final Logger logger = LoggerFactory.getLogger(GamePanel.class);
 	private GameMovementCounter gameMovementCounter;
 	private LevelMovementCounter levelMovementCounter;
 	private final int rows;
 	private final int cols;
 	private Map<Position, Square> board;
-	private final transient Image wall;
-	private final transient Image box;
-	private final transient Image box_win;
-	private final transient Image goalPosition;
-	private final transient Image warehouseMan;
-	private final transient Image floor;
+	private final Image wall;
+	private final Image box;
+	private final Image box_win;
+	private final Image goalPosition;
+	private final Image warehouseMan;
+	private final Image floor;
 	private final GameFrame gameFrame;
 	private final GameController gameController;
 	private Action moveUp;
