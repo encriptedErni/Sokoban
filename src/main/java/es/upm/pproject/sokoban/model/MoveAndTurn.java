@@ -29,4 +29,8 @@ public class MoveAndTurn
 
         return p.getMovement().equals(this.movement) && p.getTurn() == this.turn;
     }
+    @Override
+    public int hashCode() {
+        return ("_" + this.movement + "_" + this.turn + "_").hashCode();
+    }
 }
