@@ -162,6 +162,12 @@ public class GamePanel extends JPanel {
         };
     }
 
+    public void startNewGame() {
+        setActions();
+        setKeys();
+        finished = false;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         numGoals = 0;
@@ -178,6 +184,7 @@ public class GamePanel extends JPanel {
         if (numGoals == 0 && !finished) {
             this.levelMovementCounter.resetMovementCount();
             if (!gameController.nextLevel() && !finished) {
+                gameFrame.setTitle("Sokoban - Congratulations!");
                 finished = true;
                 getInputMap().clear();
                 getActionMap().clear();
@@ -196,8 +203,13 @@ public class GamePanel extends JPanel {
                 g.drawString(message, x, y);
                 logger.info("Game finished.");
             } else {
+                gameFrame.setTitle("Sokoban - " + gameController.getLevelName());
                 repaint();
             }
         }
+    }
+
+    boolean getFinished() {
+        return this.finished;
     }
 }
