@@ -20,7 +20,6 @@ class GameModelTest {
         board = gameController.parse(1);
 
     }
-
     @Nested
     class WarehouseManMoves {
         private WarehouseMan warehouseMan;
@@ -62,22 +61,66 @@ class GameModelTest {
         }
 
     }
-    /*@Test
-    void WarehouseManMovements () {
-        WarehouseMan warehouseMan = (WarehouseMan) board.get(new Position(2, 4));
-        assertEquals(0, warehouseMan.getMovements());
-        warehouseMan.move('W',0);
-        assertEquals(0, warehouseMan.getMovements());
-        warehouseMan.move('N',0);
-        assertEquals(1, warehouseMan.getMovements());
-        warehouseMan.move('W',0);
-        assertEquals(2, warehouseMan.getMovements());
-        warehouseMan.move('W',0);
-        assertEquals(2, warehouseMan.getMovements());
-        warehouseMan.move('N',0);
-        warehouseMan.move('E',0);
-        warehouseMan.move('S',0);
-        assertEquals(5, warehouseMan.getMovements());
+    @Nested
+    class BoxTests {
+        private WarehouseMan warehouseMan;
+        private Box upBox;
+        private Box rightBox;
 
-    }*/
+        @BeforeEach
+        void initWarehouseManAndWall() {
+            warehouseMan = (WarehouseMan) board.get(new Position(2, 4));
+            upBox = (Box) board.get(new Position(2, 3));
+            rightBox = (Box) board.get(new Position(3, 4));
+        }
+
+        @Test
+        void BoxCanMoveToEmptySpace() {
+            Position PreviousManPos = warehouseMan.getPosition();
+            Position PreviousBoxPos = upBox.getPosition();
+            assertTrue(warehouseMan.move('N',0));
+            assertNotNull(board.get(new Position(2, 3)));
+            assertNotNull(board.get(new Position(2, 2)));
+            WarehouseMan warehouseManMoved = (WarehouseMan) board.get(new Position(2, 3));
+            Box upBoxMoved = (Box) board.get(new Position(2, 2));
+            Position NewManPos = warehouseManMoved.getPosition();
+            Position NewBoxPos = upBoxMoved.getPosition();
+            assertEquals(NewManPos.getX(), PreviousManPos.getX());
+            assertEquals(NewManPos.getY(), PreviousManPos.getY() - 1);
+            assertEquals(NewBoxPos.getX(), PreviousBoxPos.getX());
+            assertEquals(NewBoxPos.getY(), PreviousBoxPos.getY() - 1);
+            /* El mismo test
+            assertTrue(warehouseMan.move('N',0));
+            assertEquals(new Position(2,2), upBox.getPosition());
+             */
+        }
+        @Test
+        void BoxAgainstWallDontMove() {
+            assertFalse(warehouseMan.move('E',0));
+        }
+        @Test
+        void BoxAgainstBoxDontMove() {
+            assertTrue(warehouseMan.move('N',0));
+            assertTrue(warehouseMan.move('W',1));
+            assertTrue(warehouseMan.move('N',2));
+            assertTrue(warehouseMan.move('E',3));
+            assertTrue(warehouseMan.move('N',4));
+            assertTrue(warehouseMan.move('E',5));
+            assertTrue(warehouseMan.move('S',6));
+            assertFalse(warehouseMan.move('S',7));
+            assertEquals(new Position(rightBox.getPosition().getX(), rightBox.getPosition().getY()-2), warehouseMan.getPosition());
+            assertEquals(new Position(rightBox.getPosition().getX(), rightBox.getPosition().getY()-1), upBox.getPosition());
+            assertNotNull(board.get(rightBox.getPosition()));
+        }
+        @Test
+        void BoxGetsGoal() {
+            assertTrue(warehouseMan.move('N',0));
+            assertTrue(warehouseMan.move('W',1));
+            assertTrue(warehouseMan.move('N',2));
+            assertTrue(warehouseMan.move('E',3));
+            assertTrue(warehouseMan.move('E',4));
+            assertTrue(warehouseMan.move('E',5));
+            assertNotNull(upBox.getGoalPosition());
+        }
+    }
 }
