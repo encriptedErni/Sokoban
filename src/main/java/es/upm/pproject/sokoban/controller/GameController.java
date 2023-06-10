@@ -52,6 +52,9 @@ public class GameController {
     }
 
     public Map<Position, Square> parse(int levelNumber) {
+        int nBoxes = 0;
+        int nGoalPositions = 0;
+        int nWarehouseMan = 0;
         String path = "./levels/level" + levelNumber + ".txt";
         File fd = new File(path);
         try (BufferedReader br = new BufferedReader(new FileReader(fd))) {
@@ -81,22 +84,28 @@ public class GameController {
                         case '*':
                             position = new Position(j, i);
                             this.board.put(position, new Box(position, this.board));
+                            nBoxes++;
                             break;
                         case 'W':
                             position = new Position(j, i);
                             this.warehouseMan = new WarehouseMan(position, this.board);
                             this.board.put(position, warehouseMan);
+                            nWarehouseMan++;
                             break;
                         case '#':
                             position = new Position(j, i);
                             this.board.put(position, new GoalPosition(position, this.board));
+                            nGoalPositions++;
                             break;
                         default:
                             break;
                     }
                 }
             }
-            return this.board;
+            if (levelOk(nBoxes, nGoalPositions, nWarehouseMan))
+                return this.board;
+            else
+                return new HashMap<>();
         } catch (IOException e) {
             return new HashMap<>();
         }
@@ -222,5 +231,9 @@ public class GameController {
 
     public void exitGame() {
         System.exit(1);
+    }
+
+    private boolean levelOk(int nBoxes, int nGoalPositions, int nWarehouseMan) {
+        return nBoxes == nGoalPositions && nBoxes != 0 && nWarehouseMan == 1;
     }
 }
