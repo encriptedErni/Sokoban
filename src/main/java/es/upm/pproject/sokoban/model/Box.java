@@ -98,6 +98,10 @@ public class Box implements Square {
         }
     }
 
+    public Stack<MoveAndTurn> getMovements() {
+        return movements;
+    }
+
     public Position getPosition() {
         return position;
     }
