@@ -19,7 +19,6 @@ public class GoalPosition implements Square {
         return true;
     }
 
-    public void unmove(char way, int turn) { return;}
 
     public Position getPosition() {
         return position;
