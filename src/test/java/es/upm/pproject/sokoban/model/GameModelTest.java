@@ -123,4 +123,97 @@ class GameModelTest {
             assertNotNull(upBox.getGoalPosition());
         }
     }
+    @Nested
+    class movementCounterTest{
+        private GameMovementCounter gameMovementCounter;
+
+        @BeforeEach
+        void initMovementCounter() {
+            gameMovementCounter = new GameMovementCounter();
+        }
+        @Test
+        void movementStart(){
+            assertEquals(0, gameMovementCounter.getMovementCount());
+        }
+        @Test
+        void movementCounterIncrease(){
+            assertEquals(0, gameMovementCounter.getMovementCount());
+            gameMovementCounter.incrementMovementCount();
+            gameMovementCounter.incrementMovementCount();
+            assertEquals(2, gameMovementCounter.getMovementCount());
+        }
+        @Test
+        void movementCounterDecrease(){
+            assertEquals(0, gameMovementCounter.getMovementCount());
+            gameMovementCounter.incrementMovementCount();
+            gameMovementCounter.incrementMovementCount();
+            gameMovementCounter.decrementMovementCount();
+            assertEquals(1, gameMovementCounter.getMovementCount());
+        }
+        @Test
+        void resetmovementCounter(){
+            assertEquals(0, gameMovementCounter.getMovementCount());
+            gameMovementCounter.incrementMovementCount();
+            gameMovementCounter.incrementMovementCount();
+            gameMovementCounter.resetMovementCount();
+            assertEquals(0, gameMovementCounter.getMovementCount());
+        }
+
+        @Test
+        void setmovementCounter(){
+            assertEquals(0, gameMovementCounter.getMovementCount());
+            gameMovementCounter.incrementMovementCount();
+            gameMovementCounter.incrementMovementCount();
+            gameMovementCounter.resetMovementCount();
+            gameMovementCounter.setMovementCount(10);
+            assertEquals(10, gameMovementCounter.getMovementCount());
+        }
+    }
+
+    @Nested
+    class levelCounterTest{
+        private LevelMovementCounter levelMovementCounter;
+
+        @BeforeEach
+        void initLevelMovementCounter() {
+            levelMovementCounter = new LevelMovementCounter();
+        }
+        @Test
+        void levelMovementStart(){
+            assertEquals(0, levelMovementCounter.getMovementCount());
+        }
+        @Test
+        void levelMovementCounterIncrease(){
+            assertEquals(0, levelMovementCounter.getMovementCount());
+            levelMovementCounter.incrementMovementCount();
+            levelMovementCounter.incrementMovementCount();
+            assertEquals(2, levelMovementCounter.getMovementCount());
+        }
+        @Test
+        void levelMovementCounterDecrease(){
+            assertEquals(0, levelMovementCounter.getMovementCount());
+            levelMovementCounter.incrementMovementCount();
+            levelMovementCounter.incrementMovementCount();
+            levelMovementCounter.decrementMovementCount();
+            assertEquals(1, levelMovementCounter.getMovementCount());
+        }
+        @Test
+        void resetLevelMovementCounter(){
+            assertEquals(0, levelMovementCounter.getMovementCount());
+            levelMovementCounter.incrementMovementCount();
+            levelMovementCounter.incrementMovementCount();
+            levelMovementCounter.resetMovementCount();
+            assertEquals(0, levelMovementCounter.getMovementCount());
+        }
+
+        @Test
+        void setLevelMovementCounter(){
+            assertEquals(0, levelMovementCounter.getMovementCount());
+            levelMovementCounter.incrementMovementCount();
+            levelMovementCounter.incrementMovementCount();
+            levelMovementCounter.resetMovementCount();
+            levelMovementCounter.setMovementCount(10);
+            assertEquals(10, levelMovementCounter.getMovementCount());
+        }
+    }
 }

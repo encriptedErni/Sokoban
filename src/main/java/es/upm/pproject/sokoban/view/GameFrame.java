@@ -38,21 +38,9 @@ public class GameFrame extends JFrame {
         setJMenuBar(newMenuBar());
         setLocationRelativeTo(null);
         pack();
-        setSize(100 * gameController.getCols(), 100 * gameController.getRows());
+        // Set size da BUG en sonarQube
+        // setSize(100 * gameController.getCols(), 100 * gameController.getRows());
         setVisible(true);
-    }
-
-    public void showCongratulationsMessage() {
-        JLabel congratulationsLabel = new JLabel("Congratulations!");
-        congratulationsLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        congratulationsLabel.setVerticalAlignment(SwingConstants.CENTER);
-        congratulationsLabel.setFont(new Font("Arial", Font.BOLD, 24));
-
-        JPanel messagePanel = new JPanel(new BorderLayout());
-        messagePanel.add(congratulationsLabel, BorderLayout.CENTER);
-
-        boardPanel.add(messagePanel);
-        boardPanel.repaint();
     }
 
     private JMenuBar newMenuBar() {
