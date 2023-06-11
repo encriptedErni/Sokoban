@@ -1,7 +1,6 @@
 package es.upm.pproject.sokoban.model;
 
 public class Position {
-
     private int x;
     private int y;
     public Position(int x, int y) {

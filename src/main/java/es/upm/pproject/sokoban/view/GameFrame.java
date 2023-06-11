@@ -2,43 +2,45 @@ package es.upm.pproject.sokoban.view;
 
 import javax.swing.*;
 
-import es.upm.pproject.sokoban.controller.GameController;
+import es.upm.pproject.sokoban.interfaces.Controller;
+import es.upm.pproject.sokoban.interfaces.Frame;
 import es.upm.pproject.sokoban.model.GameMovementCounter;
 import es.upm.pproject.sokoban.model.LevelMovementCounter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class GameFrame extends JFrame {
-    GamePanel boardPanel;
-    GameMenuPanel menuPanel;
-    GameController gameController;
-    GameMovementCounter gameMovementCounter;
-    LevelMovementCounter levelMovementCounter;
-    Dimension dimension;
-    public GameFrame(GameController gameController) {
-        this.gameController = gameController;
+public class GameFrame extends JFrame implements Frame {
+    private static final Logger logger = LoggerFactory.getLogger(GameFrame.class);
+    private GamePanel boardPanel;
+    private transient Controller gameController;
+    private GameMovementCounter gameMovementCounter;
+    private LevelMovementCounter levelMovementCounter;
+
+    public void initialize(Controller gameController) {
+        setController(gameController);
         this.gameMovementCounter = new GameMovementCounter();
         this.levelMovementCounter = new LevelMovementCounter();
 
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new CardLayout());
-        this.dimension = new Dimension();
-        dimension.setSize(50 * gameController.getCols(), 56 * gameController.getRows());
-        this.menuPanel = new GameMenuPanel(contentPane);
-        this.boardPanel = new GamePanel(gameController, dimension, gameMovementCounter, levelMovementCounter);
+
+        GameMenuPanel menuPanel = new GameMenuPanel(contentPane);
+        this.boardPanel = new GamePanel(gameController.getBoard(), gameController.getRows(), gameController.getCols(),
+                this, gameController, gameMovementCounter, levelMovementCounter);
 
         contentPane.add(menuPanel);
         contentPane.add(boardPanel);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Sokoban");
+        setTitle("Sokoban - " + gameController.getLevelName());
         setContentPane(contentPane);
         setJMenuBar(newMenuBar());
         setLocationRelativeTo(null);
-        setPreferredSize(dimension);
-        setResizable(false);
+        setPreferredSize(new Dimension(50 * gameController.getCols(), 50 * gameController.getRows()));
         pack();
         setVisible(true);
     }
@@ -67,7 +69,7 @@ public class GameFrame extends JFrame {
 
         JMenuItem undoMovement = new JMenuItem("Undo");
         undoMovement.addActionListener(e -> {
-            if (gameController.undoMovement(levelMovementCounter.getMovementCount() - 1)) {
+            if (gameController.undoMovement(levelMovementCounter.getMovementCount()-1)) {
                 this.levelMovementCounter.decrementMovementCount();
                 this.gameMovementCounter.decrementMovementCount();
                 boardPanel.repaint();
@@ -93,28 +95,26 @@ public class GameFrame extends JFrame {
             if (userSelection == JFileChooser.APPROVE_OPTION) {
                 File fileToLoad = fileChooser.getSelectedFile();
                 try {
-                    int game_punctuation = gameController.openSavedGame(fileToLoad);
-                    if (game_punctuation == -1) {
-                        System.err.println("Error loading saved game");
+                    int gamePunctuation = gameController.openSavedGame(fileToLoad);
+                    if (gamePunctuation == -1) {
+                        logger.error("Error loading saved game");
                         return;
                     }
 
                     this.gameController.parse(gameController.getActualLevel());
-                    this.gameMovementCounter.setMovementCount(game_punctuation);
+                    this.gameMovementCounter.setMovementCount(gamePunctuation);
                     this.gameController.doMovements(0);
                     this.levelMovementCounter.setMovementCount(gameController.getMovements().size());
 
                 } catch (FileNotFoundException ex) {
-                    throw new RuntimeException(ex);
+                    logger.error("Failed not found: {}", ex.getMessage());
                 }
             }
             boardPanel.repaint();
         });
 
         JMenuItem exit = new JMenuItem("Exit");
-        exit.addActionListener(e -> {
-            gameController.exitGame();
-        });
+        exit.addActionListener(e -> gameController.exitGame());
 
         menu.add(startNewGame);
         menu.add(restart);
@@ -129,5 +129,9 @@ public class GameFrame extends JFrame {
         menuBar.add(levelMovementCounter);
 
         return menuBar;
+    }
+
+    public void setController(Controller gameController) {
+        this.gameController = gameController;
     }
 }

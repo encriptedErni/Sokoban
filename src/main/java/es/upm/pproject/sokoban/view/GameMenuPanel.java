@@ -1,7 +1,5 @@
 package es.upm.pproject.sokoban.view;
 
-import es.upm.pproject.sokoban.controller.GameController;
-
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.EmptyBorder;

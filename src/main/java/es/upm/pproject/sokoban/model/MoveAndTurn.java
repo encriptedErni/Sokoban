@@ -1,7 +1,6 @@
 package es.upm.pproject.sokoban.model;
 
-public class MoveAndTurn
-{
+public class MoveAndTurn {
     private final Character movement;
     private final int turn;
     public MoveAndTurn(Character movement, int turn) {
