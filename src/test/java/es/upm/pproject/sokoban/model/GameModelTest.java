@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Map;
 import java.util.Stack;
 
@@ -293,7 +295,7 @@ class GameModelTest {
         private WarehouseMan warehouseMan;
         private Box boxUp;
 
-        private Stack<MoveAndTurn> boxMovements;
+        private Deque<MoveAndTurn> boxMovements;
 
         @BeforeEach
         void initWarehouseManAndWall() {
@@ -304,9 +306,9 @@ class GameModelTest {
         @Test
         void moveAndTurnGetters(){
             gameController.moveUp(0);
-            assertEquals(boxMovements.peek().getMovement(), 'N');
-            assertEquals(boxMovements.peek().getTurn(), 0);
-            assertEquals(boxMovements.peek(), new MoveAndTurn('N', 0));
+            assertEquals('N', boxMovements.peek().getMovement());
+            assertEquals(0, boxMovements.peek().getTurn());
+            assertEquals(new MoveAndTurn('N', 0), boxMovements.peek());
         }
     }
 

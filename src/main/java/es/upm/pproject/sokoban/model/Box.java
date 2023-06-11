@@ -1,8 +1,9 @@
 package es.upm.pproject.sokoban.model;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Map;
-import java.util.Stack;
 
 import es.upm.pproject.sokoban.interfaces.Square;
 import es.upm.pproject.sokoban.interfaces.Unmove;
@@ -10,14 +11,14 @@ import es.upm.pproject.sokoban.interfaces.Unmove;
 public class Box implements Square, Unmove {
 
     private Position position;
-    private Stack<MoveAndTurn> movements;
+    private Deque<MoveAndTurn> movements;
     private Map<Position, Square> board;
     private GoalPosition goalPosition = null;
 
     public Box(Position position, Map<Position, Square> board) {
         this.position = position;
         this.board = board;
-        movements = new Stack();
+        movements = new ArrayDeque<>();
     }
 
     private boolean updateMap(Position newPosition) {
@@ -80,7 +81,7 @@ public class Box implements Square, Unmove {
 
     public void unmove(char way, int turn) {
         Position oldPosition;
-        if (!movements.empty() && movements.peek().equals(new MoveAndTurn(way, turn))) {
+        if (!movements.isEmpty() && movements.peek().equals(new MoveAndTurn(way, turn))) {
             movements.pop();
             switch (way) {
                 case 'N':
@@ -102,7 +103,7 @@ public class Box implements Square, Unmove {
         }
     }
 
-    public Stack<MoveAndTurn> getMovements() {
+    public Deque<MoveAndTurn> getMovements() {
         return movements;
     }
 

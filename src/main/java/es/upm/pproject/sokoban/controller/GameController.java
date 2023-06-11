@@ -1,27 +1,20 @@
 package es.upm.pproject.sokoban.controller;
 
-import es.upm.pproject.sokoban.interfaces.Square;
-import es.upm.pproject.sokoban.model.Box;
-import es.upm.pproject.sokoban.model.GoalPosition;
-import es.upm.pproject.sokoban.model.Position;
-import es.upm.pproject.sokoban.model.Wall;
-import es.upm.pproject.sokoban.model.WarehouseMan;
-
 import java.io.*;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
+import es.upm.pproject.sokoban.interfaces.Controller;
+import es.upm.pproject.sokoban.interfaces.Square;
+import es.upm.pproject.sokoban.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GameController {
+public class GameController implements Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(GameController.class);
     private static final int MAX_LEVELS = 4;
     private final HashMap<Position, Square> board = new HashMap<>();
-    private final Stack<Character> movements = new Stack<>();
+    private final ArrayDeque<Character> movements = new ArrayDeque<>();
     private int rows;
     private int cols;
     private int actualLevel;
@@ -52,7 +45,7 @@ public class GameController {
         return actualLevel;
     }
 
-    public Stack<Character> getMovements() {
+    public Deque<Character> getMovements() {
         return movements;
     }
 
@@ -100,7 +93,7 @@ public class GameController {
                             break;
                         case '#':
                             position = new Position(j, i);
-                            this.board.put(position, new GoalPosition(position, this.board));
+                            this.board.put(position, new GoalPosition(position));
                             nGoalPositions++;
                             break;
                         default:
@@ -153,6 +146,7 @@ public class GameController {
     public void startNewGame() {
         logger.info("Starting game...");
         this.board.clear();
+        this.movements.clear();
         this.actualLevel = 1;
         parse(this.actualLevel);
     }
@@ -161,6 +155,7 @@ public class GameController {
         if (!finished) {
             logger.info("Restarting level...");
             this.board.clear();
+            this.movements.clear();
             parse(this.actualLevel);
             return true;
         }
@@ -169,15 +164,17 @@ public class GameController {
 
     public boolean undoMovement(int turn) {
         logger.info("Undoing movement...");
-        if (movements.empty()) return false;
+        if (movements.isEmpty()) return false;
         Character movement = movements.pop();
         this.warehouseMan.unmove(movement, turn);
         return true;
     }
 
     public void doMovements(int turn) {
-        for (Character movement : movements) {
-            this.warehouseMan.move(movement, turn);
+        Iterator<Character> it = movements.descendingIterator();
+        while (it.hasNext()) {
+            this.warehouseMan.move(it.next(), turn);
+            turn++;
         }
     }
 
@@ -202,21 +199,20 @@ public class GameController {
          * 2- The current game punctuation
          * 3- All the movements made from the beginning
          * */
-        try {
-            FileWriter fileWriter = new FileWriter(saveFile);
+        try (FileWriter fileWriter = new FileWriter(saveFile)){
             fileWriter.write(String.valueOf(actualLevel));
             fileWriter.write('\n');
             fileWriter.write(String.valueOf(gameMovementCounter));
             fileWriter.write('\n');
-            if(movements.isEmpty()){
+            if (movements.isEmpty()) {
                 fileWriter.write('-');
             }
-            for (Character movement : movements) {
-                fileWriter.write(movement);
+            Iterator<Character> it = movements.descendingIterator();
+            while (it.hasNext()) {
+                fileWriter.write(it.next());
             }
-            fileWriter.close();
         } catch (IOException e) {
-            System.exit(1);
+            logger.error("Failed not found: {}", e.getMessage());
         }
     }
 
@@ -225,28 +221,23 @@ public class GameController {
         int gamePunctuation;
         movements.clear();
         try (Scanner scanner = new Scanner(savedGame)) {
-            // Read the first line which contains the number of level being played
-            if (scanner.hasNextInt()) {
+            if (scanner.hasNextInt())
                 actualLevel = scanner.nextInt();
-            }
-            else {return -1;}
+            else
+                return -1;
 
-            // Read the second line which contains the current game punctuation
-            if (scanner.hasNextInt()) {
+            if (scanner.hasNextInt())
                 gamePunctuation = scanner.nextInt();
-            }
-            else{return -1;}
+            else
+                return -1;
 
-            // Read the third line which contains all the movements made from the beginning
             if (scanner.hasNext()) {
                 String movementsStr = scanner.next();
-                if(!movementsStr.equals("-")) {
-                    for (char c : movementsStr.toCharArray()) {
-                        movements.push(c);
-                    }
-                }
+                for (char c : movementsStr.toCharArray())
+                    movements.push(c);
             }
-            else{return -1;}
+            else
+                return -1;
         }
         this.board.clear();
         return gamePunctuation;

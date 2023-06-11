@@ -2,10 +2,8 @@ package es.upm.pproject.sokoban.model;
 
 import es.upm.pproject.sokoban.interfaces.Square;
 
-import java.io.Serializable;
-
 public class Wall implements Square {
-	 private Position position;
+	 private final Position position;
 
 	 public Wall(Position position) {
 	        this.position = position;
