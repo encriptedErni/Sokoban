@@ -62,8 +62,8 @@ public class GameFrame extends JFrame implements Frame {
         JMenuItem restart = new JMenuItem("Restart level");
         restart.addActionListener(e -> {
             if (gameController.restartLevel(boardPanel.getFinished())) {
+                this.gameMovementCounter.setMovementCount(this.gameMovementCounter.getMovementCount()-this.levelMovementCounter.getMovementCount());
                 this.levelMovementCounter.resetMovementCount();
-                this.gameMovementCounter.resetMovementCount();
                 boardPanel.repaint();
             }
         });
