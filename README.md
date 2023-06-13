@@ -56,13 +56,13 @@ The game also provides an "Open Saved Game" option that allows the player to res
 
 <h2> Format </h2>
 
-The levels files parsed are represented using a specific format. Each level consists of a grid of characters, where each character represents a different element of the game. The format of a level includes the following elements:
+The levels files parsed are represented using a specific format. Each level consists of a board of characters, where each character represents a different element of the game. The format of a level includes the following elements:
 
 Level name: Indicades the difficulty.
 
-Grid Size: The size of the grid is specified at the beginning, indicating the number of rows and columns.
+Board Size: The size of the board is specified at the beginning, indicating the number of rows and columns.
 
-Elements: Each character in the grid represents a specific element of the game. Common elements include:
+Elements: Each character in the board represents a specific element of the game. Common elements include:
 
 - '+' represents walls.
 - " "(space) floor.
