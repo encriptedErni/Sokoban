@@ -1,5 +1,14 @@
 # Sokoban
 
+## Installation steps
+
+```
+git clone https://costa.ls.fi.upm.es/gitlab/200356/sokoban.git
+cd sokoban
+mvn compile
+mvn exec:java
+```
+
 <h2> Files Structure</h2>
 
 interfaces: contains interfaces related to the game components.
