@@ -54,6 +54,7 @@ public class GameFrame extends JFrame implements Frame {
             this.levelMovementCounter.resetMovementCount();
             this.gameMovementCounter.resetMovementCount();
             gameController.startNewGame();
+            setTitle("Sokoban - " + gameController.getLevelName());
             boardPanel.startNewGame();
             boardPanel.repaint();
         });
