@@ -64,11 +64,11 @@ Grid Size: The size of the grid is specified at the beginning, indicating the nu
 
 Elements: Each character in the grid represents a specific element of the game. Common elements include:
 
-- + represents walls.
+- '+' represents walls.
 - " "(space) floor.
-- * represents boxes.
-- W represents the player character (warehouseman).
-- # represents goal positions.
+- '*' represents boxes.
+- 'W' represents the player character (warehouseman).
+- '#' represents goal positions.
 
 Open Saved Game File Format
 Saved game files in Sokoban follow a specific format. The file includes the following information:
