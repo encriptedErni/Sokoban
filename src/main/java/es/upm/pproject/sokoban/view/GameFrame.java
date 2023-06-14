@@ -1,5 +1,6 @@
 package es.upm.pproject.sokoban.view;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 
 import es.upm.pproject.sokoban.interfaces.Controller;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class GameFrame extends JFrame implements Frame {
     private static final Logger logger = LoggerFactory.getLogger(GameFrame.class);
@@ -19,18 +21,39 @@ public class GameFrame extends JFrame implements Frame {
     private transient Controller gameController;
     private GameMovementCounter gameMovementCounter;
     private LevelMovementCounter levelMovementCounter;
+    private Clip levelClip;
+    private Clip congratulationsClip;
 
     public void initialize(Controller gameController) {
         setController(gameController);
         this.gameMovementCounter = new GameMovementCounter();
         this.levelMovementCounter = new LevelMovementCounter();
-
+        try {
+            File audioFile = new File("./sounds/01-main-theme-overworld.wav");
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+            AudioFormat format = audioStream.getFormat();
+            DataLine.Info info = new DataLine.Info(Clip.class, format);
+            levelClip = (Clip) AudioSystem.getLine(info);
+            levelClip.open(audioStream);
+            audioFile = new File("./sounds/06-level-complete.wav");
+            audioStream = AudioSystem.getAudioInputStream(audioFile);
+            format = audioStream.getFormat();
+            info = new DataLine.Info(Clip.class, format);
+            congratulationsClip = (Clip) AudioSystem.getLine(info);
+            congratulationsClip.open(audioStream);
+        } catch (LineUnavailableException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (UnsupportedAudioFileException e) {
+            throw new RuntimeException(e);
+        }
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new CardLayout());
 
-        GameMenuPanel menuPanel = new GameMenuPanel(contentPane);
+        GameMenuPanel menuPanel = new GameMenuPanel(contentPane, levelClip, congratulationsClip);
         this.boardPanel = new GamePanel(gameController.getBoard(), gameController.getRows(), gameController.getCols(),
-                this, gameController, gameMovementCounter, levelMovementCounter);
+                this, gameController, gameMovementCounter, levelMovementCounter, levelClip, congratulationsClip);
 
         contentPane.add(menuPanel);
         contentPane.add(boardPanel);
@@ -43,6 +66,7 @@ public class GameFrame extends JFrame implements Frame {
         setPreferredSize(new Dimension(50 * gameController.getCols(), 50 * gameController.getRows()));
         pack();
         setVisible(true);
+
     }
 
     private JMenuBar newMenuBar() {
@@ -57,12 +81,20 @@ public class GameFrame extends JFrame implements Frame {
             setTitle("Sokoban - " + gameController.getLevelName());
             boardPanel.startNewGame();
             boardPanel.repaint();
+            if (congratulationsClip.isActive())
+                congratulationsClip.stop();
+
+            congratulationsClip.setFramePosition(0);
+            if (levelClip.isActive())
+                levelClip.stop();
+            levelClip.setFramePosition(0);
+            levelClip.loop(Clip.LOOP_CONTINUOUSLY);
         });
 
         JMenuItem restart = new JMenuItem("Restart level");
         restart.addActionListener(e -> {
             if (gameController.restartLevel(boardPanel.getFinished())) {
-                this.gameMovementCounter.setMovementCount(this.gameMovementCounter.getMovementCount()-this.levelMovementCounter.getMovementCount());
+                this.gameMovementCounter.setMovementCount(this.gameMovementCounter.getMovementCount() - this.levelMovementCounter.getMovementCount());
                 this.levelMovementCounter.resetMovementCount();
                 boardPanel.repaint();
             }
@@ -70,11 +102,7 @@ public class GameFrame extends JFrame implements Frame {
 
         JMenuItem undoMovement = new JMenuItem("Undo");
         undoMovement.addActionListener(e -> {
-            if (gameController.undoMovement(levelMovementCounter.getMovementCount()-1)) {
-                this.levelMovementCounter.decrementMovementCount();
-                this.gameMovementCounter.decrementMovementCount();
-                boardPanel.repaint();
-            }
+            undoMovement();
         });
 
         JMenuItem saveGame = new JMenuItem("Save Game");
@@ -134,5 +162,13 @@ public class GameFrame extends JFrame implements Frame {
 
     public void setController(Controller gameController) {
         this.gameController = gameController;
+    }
+
+    public void undoMovement() {
+        if (gameController.undoMovement(levelMovementCounter.getMovementCount() - 1)) {
+            this.levelMovementCounter.decrementMovementCount();
+            this.gameMovementCounter.decrementMovementCount();
+            boardPanel.repaint();
+        }
     }
 }

@@ -2,11 +2,13 @@ package es.upm.pproject.sokoban.view;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 import es.upm.pproject.sokoban.interfaces.Controller;
@@ -38,13 +40,16 @@ public class GamePanel extends JPanel {
     private transient Action moveDown;
     private transient Action moveLeft;
     private transient Action moveRight;
+    private transient Action undoCtrlZ;
     private int numGoals = 0;
     private int rows;
     private int cols;
+    private Clip levelClip;
+    private Clip congratulationsClip;
     private boolean finished = false;
 
     public GamePanel(Map<Position, Square> board, int rows, int cols, Frame gameFrame, Controller gameController,
-                     GameMovementCounter gameMovementCounter, LevelMovementCounter levelMovementCounter) {
+                     GameMovementCounter gameMovementCounter, LevelMovementCounter levelMovementCounter, Clip levelClip, Clip congratulationsClip) {
         this.board = board;
         this.rows = rows;
         this.cols = cols;
@@ -58,6 +63,8 @@ public class GamePanel extends JPanel {
         this.warehouseMan = loadImage("./sprites/warehouse-man.png");
         this.gameMovementCounter = gameMovementCounter;
         this.levelMovementCounter = levelMovementCounter;
+        this.levelClip=levelClip;
+        this.congratulationsClip=congratulationsClip;
 
         setActions();
         setKeys();
@@ -113,6 +120,8 @@ public class GamePanel extends JPanel {
         getActionMap().put("moveRightArrow", moveRight);
         getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0), "moveRightD");
         getActionMap().put("moveRightD", moveRight);
+        getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK), "ctrlZ");
+        getActionMap().put("ctrlZ", undoCtrlZ);
     }
 
     private void updateScoreAndPaint() {
@@ -159,6 +168,13 @@ public class GamePanel extends JPanel {
                 }
             }
         };
+        this.undoCtrlZ = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameFrame.undoMovement();
+            }
+        };
+
     }
 
     public void startNewGame() {
@@ -200,6 +216,8 @@ public class GamePanel extends JPanel {
                 int x = (gameFrame.getWidth() - messageWidth) / 2;
                 int y = (gameFrame.getHeight() / 2 - messageHeight) / 2;
                 g.drawString(message, x, y);
+                levelClip.stop();
+                congratulationsClip.start();
                 logger.info("Game finished.");
             } else {
                 gameFrame.setTitle("Sokoban - " + gameController.getLevelName());
