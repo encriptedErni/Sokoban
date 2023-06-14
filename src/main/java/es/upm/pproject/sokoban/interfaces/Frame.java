@@ -6,4 +6,6 @@ public interface Frame {
     void setTitle(String title);
     int getWidth();
     int getHeight();
+
+    void undoMovement();
 }

@@ -1,12 +1,13 @@
 package es.upm.pproject.sokoban.view;
 
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.EmptyBorder;
 
 public class GameMenuPanel extends JPanel {
 
-    public GameMenuPanel(JPanel contentPane) {
+    public GameMenuPanel(JPanel contentPane, Clip levelClip, Clip congratulationsClip) {
 
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(20, 20, 20, 20)); // Agrega un espacio interno alrededor del panel
@@ -31,6 +32,7 @@ public class GameMenuPanel extends JPanel {
         startButton.addActionListener(e -> {
             CardLayout cardLayout = (CardLayout) contentPane.getLayout();
             cardLayout.next(contentPane);
+            levelClip.loop(Clip.LOOP_CONTINUOUSLY);
         });
         buttonPanel.add(startButton);
 
@@ -39,7 +41,11 @@ public class GameMenuPanel extends JPanel {
         exitButton.setFont(buttonFont);
         exitButton.setBackground(buttonBackgroundColor);
         exitButton.setForeground(buttonTextColor);
-        exitButton.addActionListener(e -> System.exit(0));
+        exitButton.addActionListener(e ->{
+                levelClip.close();
+                congratulationsClip.close();
+                System.exit(0);
+        });
         buttonPanel.add(exitButton);
 
         add(buttonPanel, BorderLayout.CENTER);
